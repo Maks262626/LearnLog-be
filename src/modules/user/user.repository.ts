@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { User, UserRoleName } from './entities/user.entity';
 
 @Injectable()
 export class UserRepository {
@@ -24,6 +24,13 @@ export class UserRepository {
     const user = await this.usersRepository.update(updateUserDto, {
       where: { id },
     });
+    return Boolean(user[0]);
+  }
+  async updateUserRole(id:string,role: UserRoleName){
+    const user = await this.usersRepository.update(
+      {role},
+      {where: {id}}
+    )
     return Boolean(user[0]);
   }
   async deleteUser(id: string): Promise<boolean> {

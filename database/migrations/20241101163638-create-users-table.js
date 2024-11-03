@@ -38,6 +38,11 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: true,
       },
+      role: {
+        type: Sequelize.Sequelize.ENUM('student', 'teacher', 'manager', 'superadmin'),
+        allowNull: true, 
+        defaultValue: null,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

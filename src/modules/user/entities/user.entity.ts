@@ -67,6 +67,13 @@ export class User extends Model<User> {
   })
   group_id: string;
 
+  @ApiProperty({ enum: () => UserRoleName })
+  @Column({
+    type: DataType.ENUM('student', 'teacher', 'manager', 'superadmin'),
+    allowNull:true
+  })
+  role: UserRoleName;
+
   @ApiProperty()
   @CreatedAt
   declare created_at: Date;

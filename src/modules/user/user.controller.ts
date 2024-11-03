@@ -14,12 +14,15 @@ import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { UserRole } from 'src/shared/decorators/user-role.decorator';
 import { CreateUserDto, SetRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { User, UserRoleName } from './entities/user.entity';
 import { UserService } from './user.service';
+import { AuthzService } from 'src/core/authz/authz.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+  ) {}
 
   @Post('register')
   @UseGuards(AuthGuard('jwt'))
@@ -64,7 +67,7 @@ export class UserController {
   async setUserRole(
     @Param('id') userId: string,
     @Body() setRoleDto: SetRoleDto,
-    @UserRole() role: string,
+    @UserRole() role: UserRoleName,
   ): Promise<void> {
     this.userService.setUserRole(userId, setRoleDto, role);
   }

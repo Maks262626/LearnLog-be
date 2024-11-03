@@ -6,12 +6,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserService } from 'src/modules/user/user.service';
 import { ErrorMap } from 'src/shared/response/error.map';
+import { AuthzService } from './authz.service';
 
 @Injectable()
 export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly authzService: AuthzService) {
     super();
   }
 
@@ -23,7 +23,7 @@ export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
     const auth0UserId = request.user.auth0_user_id;
 
     try {
-      const roles = await this.userService.getUserRoles(auth0UserId);
+      const roles = await this.authzService.getUserRolesAuth0(auth0UserId);
       if (roles.length !== 1) {
         throw new ForbiddenException(
           'User must have exactly one role assigned',
