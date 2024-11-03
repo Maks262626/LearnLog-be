@@ -9,11 +9,11 @@ export class SetRoleDto {
 }
 
 export class CreateUserDto {
-  @ApiPropertyOptional()
+  @ApiProperty()
   @IsString()
   first_name: string;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
   @IsString()
   last_name: string;
 

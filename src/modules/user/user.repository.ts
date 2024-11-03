@@ -26,11 +26,8 @@ export class UserRepository {
     });
     return Boolean(user[0]);
   }
-  async updateUserRole(id:string,role: UserRoleName){
-    const user = await this.usersRepository.update(
-      {role},
-      {where: {id}}
-    )
+  async updateUserRole(id: string, role: UserRoleName) {
+    const user = await this.usersRepository.update({ role }, { where: { id } });
     return Boolean(user[0]);
   }
   async deleteUser(id: string): Promise<boolean> {

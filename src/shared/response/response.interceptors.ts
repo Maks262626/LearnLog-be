@@ -1,10 +1,10 @@
 import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
   CallHandler,
+  ExecutionContext,
   HttpException,
   HttpStatus,
+  Injectable,
+  NestInterceptor,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -20,10 +20,7 @@ export class ResponseInterceptor implements NestInterceptor {
     );
   }
 
-  errorHandler(
-    exception: HttpException,
-    context: ExecutionContext,
-  ) {
+  errorHandler(exception: HttpException, context: ExecutionContext) {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse();
     const status =

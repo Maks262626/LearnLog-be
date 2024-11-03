@@ -70,7 +70,7 @@ export class User extends Model<User> {
   @ApiProperty({ enum: () => UserRoleName })
   @Column({
     type: DataType.ENUM('student', 'teacher', 'manager', 'superadmin'),
-    allowNull:true
+    allowNull: true,
   })
   role: UserRoleName;
 

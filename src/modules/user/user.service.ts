@@ -1,27 +1,22 @@
-import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException,
-  ForbiddenException,
   forwardRef,
   Inject,
   Injectable,
-  NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { firstValueFrom } from 'rxjs';
+import { AuthzService } from 'src/core/authz/authz.service';
 import { ErrorMap } from 'src/shared/response/error.map';
 import { CreateUserDto, SetRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserRoleIds, UserRoleName } from './entities/user.entity';
+import { User, UserRoleName } from './entities/user.entity';
 import { UserRepository } from './user.repository';
-import { AuthzService } from 'src/core/authz/authz.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly usersRepository: UserRepository,
-    @Inject(forwardRef(() => AuthzService)) private readonly authzService: AuthzService,
+    @Inject(forwardRef(() => AuthzService))
+    private readonly authzService: AuthzService,
   ) {}
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
@@ -80,18 +75,22 @@ export class UserService {
     await this.updateRegistrationStatus(user.id, true);
     return this.getUser(user.id);
   }
-  async setUserRole(userId:string, setRoleDto:SetRoleDto, role:UserRoleName):Promise<void>{
-    //if i am superamin - i can do anything, 
+  async setUserRole(
+    userId: string,
+    setRoleDto: SetRoleDto,
+    role: UserRoleName,
+  ): Promise<void> {
+    //if i am superamin - i can do anything,
     //if i am manager   - i can do anything except seting superadmin
     if (
       role === UserRoleName.SUPERADMIN ||
       (role === UserRoleName.MANAGER &&
         setRoleDto.role !== UserRoleName.SUPERADMIN)
-    ){
-      console.log("role",role);
-      
-      this.authzService.setUserRoleAuth0(userId,setRoleDto);
-      this.usersRepository.updateUserRole(userId,setRoleDto.role);
+    ) {
+      console.log('role', role);
+
+      this.authzService.setUserRoleAuth0(userId, setRoleDto);
+      this.usersRepository.updateUserRole(userId, setRoleDto.role);
     }
   }
   async register(createUserDto: CreateUserDto): Promise<Partial<User>> {

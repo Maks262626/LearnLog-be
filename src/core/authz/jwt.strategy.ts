@@ -3,12 +3,13 @@ import { PassportStrategy } from '@nestjs/passport';
 import * as dotenv from 'dotenv';
 import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { AuthzService } from './authz.service';
 
 dotenv.config();
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly authzService: AuthzService) {
     super({
       secretOrKeyProvider: passportJwtSecret({
         cache: true,
@@ -24,9 +25,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: any): any {
-    return {
-      auth0_user_id: payload.sub,
-    };
+  async validate(payload: any): Promise<any> {
+    const auth0_user_id = payload.sub;
+    const roles = await this.authzService.getUserRolesAuth0(auth0_user_id);
+    return { auth0_user_id, roles };
   }
 }

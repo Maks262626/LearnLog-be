@@ -1,11 +1,20 @@
-import { HttpService } from "@nestjs/axios";
-import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { firstValueFrom } from "rxjs";
-import { SetRoleDto } from "src/modules/user/dto/create-user.dto";
-import { UserRoleName, UserRoleIds } from "src/modules/user/entities/user.entity";
-import { UserService } from "src/modules/user/user.service";
-import { ErrorMap } from "src/shared/response/error.map";
+import { HttpService } from '@nestjs/axios';
+import {
+  ForbiddenException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
+import { SetRoleDto } from 'src/modules/user/dto/create-user.dto';
+import {
+  UserRoleIds,
+  UserRoleName,
+} from 'src/modules/user/entities/user.entity';
+import { UserService } from 'src/modules/user/user.service';
+import { ErrorMap } from 'src/shared/response/error.map';
 
 @Injectable()
 export class AuthzService {
@@ -17,11 +26,13 @@ export class AuthzService {
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
-    @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
   ) {
     this.auth0IssuerUrl = this.configService.get<string>('auth.issuer');
     this.auth0ClientId = this.configService.get<string>('auth.clientId');
-    this.auth0ClientSecret = this.configService.get<string>('auth.clientSecret');
+    this.auth0ClientSecret =
+      this.configService.get<string>('auth.clientSecret');
   }
 
   async getAccessTokenAuth0(): Promise<string> {

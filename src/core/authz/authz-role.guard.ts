@@ -24,12 +24,15 @@ export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
 
     try {
       const roles = await this.authzService.getUserRolesAuth0(auth0UserId);
+
       if (roles.length !== 1) {
         throw new ForbiddenException(
           'User must have exactly one role assigned',
         );
       }
       request.user.role = roles[0];
+      console.log(request.user);
+
       return true;
     } catch (error) {
       throw new UnauthorizedException(ErrorMap.FAILED_TO_GET_ROLES);
