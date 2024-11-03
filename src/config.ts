@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const config = {
   app: {
-    port: process.env.APP_PORT || 1234
+    port: process.env.APP_PORT || 1234,
   },
   db: {
     host: process.env.DB_HOST,
@@ -15,7 +15,7 @@ const config = {
     issuer: process.env.AUTH0_ISSUER_URL,
     audience: process.env.AUTH0_AUDIENCE,
     clientId: process.env.AUTH0_CLIENT_ID,
-    clientSecret: process.env.AUTH0_CLIENT_SECRET
-  }
-}
+    clientSecret: process.env.AUTH0_CLIENT_SECRET,
+  },
+};
 export default config;

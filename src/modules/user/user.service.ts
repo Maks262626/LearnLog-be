@@ -1,11 +1,17 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
+import { ErrorMap } from 'src/shared/response/error.map';
 import { CreateUserDto, SetRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserRepository } from './user.repository';
 import { User, UserRoleIds, UserRoleName } from './entities/user.entity';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
-import { ConfigService } from '@nestjs/config';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
@@ -20,9 +26,8 @@ export class UserService {
   ) {
     this.auth0IssuerUrl = this.configService.get<string>('auth.issuer');
     this.auth0ClientId = this.configService.get<string>('auth.clientId');
-    this.auth0ClientSecret = this.configService.get<string>(
-      'auth.clientSecret',
-    );
+    this.auth0ClientSecret =
+      this.configService.get<string>('auth.clientSecret');
   }
   createUser(createUserDto: CreateUserDto): Promise<User> {
     return this.usersRepository.createUser(createUserDto);
@@ -30,6 +35,7 @@ export class UserService {
 
   async findAllUsers(role: string) {
     switch (role) {
+      case UserRoleName.SUPERADMIN:
       case UserRoleName.TEACHER:
         return this.usersRepository.findAllUsers();
       case UserRoleName.STUDENT:
@@ -87,29 +93,35 @@ export class UserService {
         client_secret: this.auth0ClientSecret,
         audience: `${this.auth0IssuerUrl}api/v2/`,
         grant_type: 'client_credentials',
-      }
+      };
 
       try {
         const response = await firstValueFrom(
-          this.httpService.post(url, payload)
+          this.httpService.post(url, payload),
         );
         this.accessToken = response.data.access_token;
       } catch (err) {
         throw new Error('failed to get auth token');
       }
-
     }
     return this.accessToken;
   }
-  async setUserRole(userId: string, setRoleDto: SetRoleDto, role: string): Promise<void> {
+  async setUserRole(
+    userId: string,
+    setRoleDto: SetRoleDto,
+    role: string,
+  ): Promise<void> {
     const user = await this.getUser(userId);
     if (!user) {
-      throw new Error('failed to get user');
+      throw new NotFoundException(ErrorMap.USER_NOT_FOUND);
     }
 
-    if (role === UserRoleName.SUPERADMIN ||
-      (role === UserRoleName.MANAGER && setRoleDto.role !== UserRoleName.SUPERADMIN)) {
-      let roleId:string;
+    if (
+      role === UserRoleName.SUPERADMIN ||
+      (role === UserRoleName.MANAGER &&
+        setRoleDto.role !== UserRoleName.SUPERADMIN)
+    ) {
+      let roleId: string;
       switch (setRoleDto.role) {
         case UserRoleName.SUPERADMIN:
           roleId = UserRoleIds.SUPERADMIN;
@@ -126,8 +138,8 @@ export class UserService {
         default:
           break;
       }
-      if(!roleId){
-        throw new Error('failed to find role with given id');
+      if (!roleId) {
+        throw new NotFoundException(ErrorMap.FAILED_TO_GET_ROLES);
       }
       await this.removeAllRoles(user.auth0_user_id);
       await this.assignRoles(user.auth0_user_id, [roleId]);
@@ -135,55 +147,67 @@ export class UserService {
   }
   async assignRoles(auth0UserId: string, roles: string[]): Promise<void> {
     await this.getAccessToken();
-    console.log("accessToken", this.accessToken);
-
     const url = `${this.auth0IssuerUrl}api/v2/users/${auth0UserId}/roles`;
     const payload = { roles };
-    const headers = { headers: { Authorization: `Bearer ${this.accessToken}`, 'Content-Type': 'application/json' } }
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    };
 
     try {
-      await firstValueFrom(
-        this.httpService.post(url, payload, headers),
-      );
+      await firstValueFrom(this.httpService.post(url, payload, headers));
     } catch (error) {
-      throw new Error('failed to assign roles');
+      throw new ForbiddenException(ErrorMap.FAILED_TO_ASSIGN_ROLES);
     }
   }
   async removeAllRoles(auth0UserId: string): Promise<void> {
     await this.getAccessToken();
     const url = `${this.auth0IssuerUrl}api/v2/users/${auth0UserId}/roles`;
-    const headers = { headers: { Authorization: `Bearer ${this.accessToken}`, 'Content-Type': 'application/json' } };
-  
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
     try {
       const currentRoles = await firstValueFrom(
         this.httpService.get(url, headers),
       );
       const roleIds = currentRoles.data.map((role: any) => role.id);
-  
+
       if (roleIds.length) {
         await firstValueFrom(
-          this.httpService.delete(url, { ...headers, data: { roles: roleIds } })
+          this.httpService.delete(url, {
+            ...headers,
+            data: { roles: roleIds },
+          }),
         );
       }
     } catch (error) {
-      throw new Error('Failed to remove roles');
+      throw new ForbiddenException(ErrorMap.FAILED_TO_REMOVE_ROLES);
     }
   }
-  
+
   async getUserRoles(auth0UserId: string): Promise<string[]> {
     await this.getAccessToken();
 
     const url = `${this.auth0IssuerUrl}api/v2/users/${auth0UserId}/roles`;
-    const headers = { headers: { Authorization: `Bearer ${this.accessToken}` } };
+    const headers = {
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+    };
 
     try {
       const response = await firstValueFrom(this.httpService.get(url, headers));
 
-      const roles: string[] = response.data.map((role: { name: string }) => role.name);
+      const roles: string[] = response.data.map(
+        (role: { name: string }) => role.name,
+      );
       return roles;
     } catch (error) {
-      console.log(error);
-      throw new Error('failed to get user roles');
+      throw new ForbiddenException(ErrorMap.FAILED_TO_GET_ROLES);
     }
   }
   async register(createUserDto: CreateUserDto): Promise<Partial<User>> {
@@ -193,11 +217,10 @@ export class UserService {
         return existUser;
       }
       const user = this.createUser({ ...createUserDto });
-      console.log('user', user);
 
       return user;
     } catch (err) {
-      throw new Error('failed to register');
+      throw new BadRequestException(ErrorMap.AUTH_ERROR);
     }
   }
 }

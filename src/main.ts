@@ -1,11 +1,13 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
+import { ResponseInterceptor } from './shared/response/response.interceptors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalInterceptors(new ResponseInterceptor());
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
@@ -25,7 +27,6 @@ async function bootstrap() {
   await app.listen(port, () => {
     console.log(`Server is running on port ${port}!`);
   });
-
 }
 
 bootstrap();

@@ -1,15 +1,15 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
+import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
 import { DatabaseModule } from 'src/core/database/database.module';
 import { userProviders } from './entities/user.entity';
+import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
-import { HttpModule } from '@nestjs/axios';
+import { UserService } from './user.service';
 
 @Module({
-  imports: [DatabaseModule,HttpModule],
+  imports: [DatabaseModule, HttpModule],
   controllers: [UserController],
-  providers: [UserService,UserRepository,...userProviders],
-  exports: [UserService,UserRepository]
+  providers: [UserService, UserRepository, ...userProviders],
+  exports: [UserService, UserRepository],
 })
 export class UserModule {}

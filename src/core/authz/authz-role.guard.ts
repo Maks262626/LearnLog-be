@@ -1,6 +1,13 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from 'src/modules/user/user.service';
+import { ErrorMap } from 'src/shared/response/error.map';
 
 @Injectable()
 export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
@@ -10,22 +17,22 @@ export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const canActivate = await super.canActivate(context);
-    if (!canActivate) return false;
+    if (!canActivate) throw new UnauthorizedException(ErrorMap.AUTH_ERROR);
 
     const request = context.switchToHttp().getRequest();
     const auth0UserId = request.user.auth0_user_id;
 
     try {
       const roles = await this.userService.getUserRoles(auth0UserId);
-      if(roles.length === 1){
-        request.user.role = roles[0];
-        return true; 
-      } 
-      console.error('user must have 1 role');
-      return false;
+      if (roles.length !== 1) {
+        throw new ForbiddenException(
+          'User must have exactly one role assigned',
+        );
+      }
+      request.user.role = roles[0];
+      return true;
     } catch (error) {
-      console.error('Error loading user roles:', error);
-      return false; 
+      throw new UnauthorizedException(ErrorMap.FAILED_TO_GET_ROLES);
     }
   }
 }
