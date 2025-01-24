@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUniversityDto } from './dto/create-university.dto';
 import { UpdateUniversityDto } from './dto/update-university.dto';
-import { UniversityRepository } from './university,repository';
+import { UniversityRepository } from './university.repository';
 
 @Injectable()
 export class UniversityService {

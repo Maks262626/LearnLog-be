@@ -6,11 +6,13 @@ import {
   DataType,
   Default,
   DeletedAt,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
+import { Faculty } from 'src/modules/faculty/entities/faculty.entity';
 import { v4 } from 'uuid';
 
 @Table({ tableName: 'universities' })
@@ -24,6 +26,9 @@ export class University extends Model<University> {
   @ApiProperty()
   @Column(DataType.STRING)
   name: string;
+
+  @HasMany(()=>Faculty)
+  faculties: Faculty[]
 
   @ApiProperty()
   @CreatedAt

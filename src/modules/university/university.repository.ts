@@ -15,7 +15,7 @@ export class UniversityRepository {
     return this.universityRepository.create({ ...createUniversityDto });
   }
   async findAllUniversities(): Promise<University[]> {
-    const universities = await this.universityRepository.findAll();
+    const universities = await this.universityRepository.findAll(); 
     return universities;
   }
   async findUniversity(id: string): Promise<University> {
