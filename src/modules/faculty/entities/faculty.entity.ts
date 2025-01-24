@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import sequelize from "sequelize";
-import { Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { Group } from "src/modules/group/entities/group.entity";
 import { University } from "src/modules/university/entities/university.entity";
 import { v4 } from "uuid";
 
@@ -18,7 +19,13 @@ export class Faculty extends Model<Faculty>{
 
   @Column(DataType.STRING)
   @ForeignKey(() => University)
-  university_id: string
+  university_id: string;
+
+  @BelongsTo(()=>University)
+  university: University;
+
+  @HasMany(()=>Group)
+  groups: Group[];
 
   @ApiProperty()
   @CreatedAt

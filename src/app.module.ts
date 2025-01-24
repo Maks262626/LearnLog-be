@@ -6,6 +6,7 @@ import { DatabaseModule } from './core/database/database.module';
 import { UniversityModule } from './modules/university/university.module';
 import { UserModule } from './modules/user/user.module';
 import { FacultyModule } from './modules/faculty/faculty.module';
+import { GroupModule } from './modules/group/group.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { FacultyModule } from './modules/faculty/faculty.module';
     AuthzModule,
     UniversityModule,
     FacultyModule,
+    GroupModule,
   ],
   controllers: [],
   providers: [],
