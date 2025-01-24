@@ -13,6 +13,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { Faculty } from 'src/modules/faculty/entities/faculty.entity';
+import { User } from 'src/modules/user/entities/user.entity';
 import { v4 } from 'uuid';
 
 @Table({ tableName: 'universities' })
@@ -29,6 +30,9 @@ export class University extends Model<University> {
 
   @HasMany(()=>Faculty)
   faculties: Faculty[]
+
+  @HasMany(()=>User)
+  users: User[];
 
   @ApiProperty()
   @CreatedAt

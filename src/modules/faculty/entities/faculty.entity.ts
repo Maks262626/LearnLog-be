@@ -3,6 +3,7 @@ import sequelize from "sequelize";
 import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
 import { Group } from "src/modules/group/entities/group.entity";
 import { University } from "src/modules/university/entities/university.entity";
+import { User } from "src/modules/user/entities/user.entity";
 import { v4 } from "uuid";
 
 @Table({tableName: 'faculties'})
@@ -26,6 +27,9 @@ export class Faculty extends Model<Faculty>{
 
   @HasMany(()=>Group)
   groups: Group[];
+
+  @HasMany(()=>User)
+  users: User[];
 
   @ApiProperty()
   @CreatedAt

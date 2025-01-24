@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import sequelize from 'sequelize';
 import {
+  BelongsTo,
   Column,
   CreatedAt,
   DataType,
@@ -11,6 +12,9 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
+import { Faculty } from 'src/modules/faculty/entities/faculty.entity';
+import { Group } from 'src/modules/group/entities/group.entity';
+import { University } from 'src/modules/university/entities/university.entity';
 import { v4 } from 'uuid';
 
 export enum UserRoleName {
@@ -73,6 +77,15 @@ export class User extends Model<User> {
     allowNull: true,
   })
   role: UserRoleName;
+
+  @BelongsTo(() => University)
+  university: University;
+
+  @BelongsTo(() => Faculty)
+  faculty: Faculty;
+
+  @BelongsTo(() => Group)
+  group: Group;
 
   @ApiProperty()
   @CreatedAt
