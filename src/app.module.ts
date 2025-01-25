@@ -7,6 +7,7 @@ import { UniversityModule } from './modules/university/university.module';
 import { UserModule } from './modules/user/user.module';
 import { FacultyModule } from './modules/faculty/faculty.module';
 import { GroupModule } from './modules/group/group.module';
+import { SubjectModule } from './modules/subject/subject.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { GroupModule } from './modules/group/group.module';
     UniversityModule,
     FacultyModule,
     GroupModule,
+    SubjectModule,
   ],
   controllers: [],
   providers: [],

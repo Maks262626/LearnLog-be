@@ -7,6 +7,7 @@ import {
   DataType,
   Default,
   DeletedAt,
+  ForeignKey,
   Model,
   PrimaryKey,
   Table,
@@ -57,18 +58,21 @@ export class User extends Model<User> {
     type: DataType.UUID,
     allowNull: true,
   })
+  @ForeignKey(() => University)
   university_id: string;
 
   @Column({
     type: DataType.UUID,
     allowNull: true,
   })
+  @ForeignKey(() => Faculty)
   faculty_id: string;
 
   @Column({
     type: DataType.UUID,
     allowNull: true,
   })
+  @ForeignKey(() => Group)
   group_id: string;
 
   @ApiProperty({ enum: () => UserRoleName })
@@ -78,11 +82,11 @@ export class User extends Model<User> {
   })
   role: UserRoleName;
 
-  @BelongsTo(() => University)
-  university: University;
-
   @BelongsTo(() => Faculty)
   faculty: Faculty;
+  
+  @BelongsTo(() => University)
+  university: University;
 
   @BelongsTo(() => Group)
   group: Group;

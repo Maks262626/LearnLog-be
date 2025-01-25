@@ -5,4 +5,8 @@ export class CreateGroupDto {
   @ApiProperty()
   @IsString()
   name: string;
+
+  @ApiProperty()
+  @IsString()
+  faculty_id: string;
 }

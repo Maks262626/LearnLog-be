@@ -1,7 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import sequelize from "sequelize";
-import { BeforeCreate, BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
 import { Faculty } from "src/modules/faculty/entities/faculty.entity";
+import { Subject } from "src/modules/subject/entities/subject.entity";
 import { User } from "src/modules/user/entities/user.entity";
 import { v4 } from "uuid";
 
@@ -26,6 +27,9 @@ export class Group extends Model<Group> {
 
   @HasMany(()=>User)
   users: User[];
+
+  @HasMany(()=>Subject)
+  subject: Subject[];
 
   @ApiProperty()
   @CreatedAt
