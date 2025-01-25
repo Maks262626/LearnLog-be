@@ -8,6 +8,7 @@ import { UserModule } from './modules/user/user.module';
 import { FacultyModule } from './modules/faculty/faculty.module';
 import { GroupModule } from './modules/group/group.module';
 import { SubjectModule } from './modules/subject/subject.module';
+import { FinalGradeModule } from './modules/final-grade/final-grade.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SubjectModule } from './modules/subject/subject.module';
     FacultyModule,
     GroupModule,
     SubjectModule,
+    FinalGradeModule,
   ],
   controllers: [],
   providers: [],

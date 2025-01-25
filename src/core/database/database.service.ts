@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { Sequelize } from 'sequelize-typescript';
 import { Faculty } from 'src/modules/faculty/entities/faculty.entity';
+import { FinalGrade } from 'src/modules/final-grade/entities/final-grade.entity';
 import { Group } from 'src/modules/group/entities/group.entity';
 import { Subject } from 'src/modules/subject/entities/subject.entity';
 import { University } from 'src/modules/university/entities/university.entity';
@@ -18,7 +19,7 @@ export const databaseProviders = [
         password: configService.get<string>('db.password'),
         database: configService.get<string>('db.name'),
       });
-      sequelize.addModels([User, University, Faculty, Group, Subject]);
+      sequelize.addModels([User, University, Faculty, Group, Subject, FinalGrade]);
       return sequelize;
     },
     inject: [ConfigService],

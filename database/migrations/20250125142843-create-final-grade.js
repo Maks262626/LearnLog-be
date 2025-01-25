@@ -2,52 +2,49 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('subjects', {
+    await queryInterface.createTable('final_grades', {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
+      },
+      final_grade: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      desciption: {
-        type: Sequelize.STRING,
+      exam_grade: {
+        type: Sequelize.INTEGER,
         allowNull: true, 
       },
-      type: {
-        type: Sequelize.ENUM('exam', 'credit'),
+      subject_id: {
+        type: Sequelize.UUID,
         allowNull: false,
-      },
-      group_id: {
-        type: Sequelize.UUID,
         references: {
-          model: 'groups', 
-          key: 'id', 
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL', 
-      },
-      teacher_id: {
-        type: Sequelize.UUID,
-        references: {
-          model: 'users', 
+          model: 'subjects',
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL', 
+        onDelete: 'CASCADE',
+      },
+      user_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       deleted_at: {
         type: Sequelize.DATE,
@@ -57,6 +54,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('subjects');
+    await queryInterface.dropTable('final_grades');
   },
 };
