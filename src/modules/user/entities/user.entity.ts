@@ -8,13 +8,17 @@ import {
   Default,
   DeletedAt,
   ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
 import { Faculty } from 'src/modules/faculty/entities/faculty.entity';
+import { FinalGrade } from 'src/modules/final-grade/entities/final-grade.entity';
+import { Grade } from 'src/modules/grade/entities/grade.entity';
 import { Group } from 'src/modules/group/entities/group.entity';
+import { StudentSubmission } from 'src/modules/student-submission/entities/student-submission.entity';
 import { University } from 'src/modules/university/entities/university.entity';
 import { v4 } from 'uuid';
 
@@ -90,6 +94,15 @@ export class User extends Model<User> {
 
   @BelongsTo(() => Group)
   group: Group;
+
+  @HasMany(()=>StudentSubmission)
+  studentSubmissions: StudentSubmission[];
+
+  @HasMany(()=>Grade)
+  grades: Grade[];
+
+  @HasMany(()=>FinalGrade)
+  finalGrades: FinalGrade[];
 
   @ApiProperty()
   @CreatedAt

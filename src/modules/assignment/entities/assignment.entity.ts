@@ -1,6 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { Grade } from "src/modules/grade/entities/grade.entity";
+import { StudentSubmission } from "src/modules/student-submission/entities/student-submission.entity";
 import { Subject } from "src/modules/subject/entities/subject.entity";
 import { v4 } from "uuid";
 
@@ -30,6 +32,12 @@ export class Assignment extends Model<Assignment>{
  
   @BelongsTo(() => Subject)
   subject: Subject;
+
+  @HasMany(()=>StudentSubmission)
+  studentSubmissions: StudentSubmission[];
+
+  @HasMany(()=>Grade)
+  grades: Grade[];
 
   @ApiProperty()
   @CreatedAt
