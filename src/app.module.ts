@@ -10,6 +10,7 @@ import { GroupModule } from './modules/group/group.module';
 import { SubjectModule } from './modules/subject/subject.module';
 import { FinalGradeModule } from './modules/final-grade/final-grade.module';
 import { AssignmentModule } from './modules/assignment/assignment.module';
+import { StudentSubmissionModule } from './modules/student-submission/student-submission.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AssignmentModule } from './modules/assignment/assignment.module';
     SubjectModule,
     FinalGradeModule,
     AssignmentModule,
+    StudentSubmissionModule,
   ],
   controllers: [],
   providers: [],
