@@ -12,6 +12,7 @@ import { FinalGradeModule } from './modules/final-grade/final-grade.module';
 import { AssignmentModule } from './modules/assignment/assignment.module';
 import { StudentSubmissionModule } from './modules/student-submission/student-submission.module';
 import { GradeModule } from './modules/grade/grade.module';
+import { SubjectScheduleModule } from './modules/subject-schedule/subject-schedule.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { GradeModule } from './modules/grade/grade.module';
     AssignmentModule,
     StudentSubmissionModule,
     GradeModule,
+    SubjectScheduleModule,
   ],
   controllers: [],
   providers: [],
