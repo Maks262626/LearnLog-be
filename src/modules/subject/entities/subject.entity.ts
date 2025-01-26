@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { Assignment } from "src/modules/assignment/entities/assignment.entity";
 import { Group } from "src/modules/group/entities/group.entity";
 import { User } from "src/modules/user/entities/user.entity";
 import { v4 } from "uuid";
@@ -43,6 +44,9 @@ export class Subject extends Model<Subject> {
 
   @BelongsTo(() => Group)
   group: Group;
+
+  @HasMany(()=>Assignment)
+  assignments: Assignment[];
 
   @ApiProperty()
   @CreatedAt

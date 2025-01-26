@@ -9,6 +9,7 @@ import { FacultyModule } from './modules/faculty/faculty.module';
 import { GroupModule } from './modules/group/group.module';
 import { SubjectModule } from './modules/subject/subject.module';
 import { FinalGradeModule } from './modules/final-grade/final-grade.module';
+import { AssignmentModule } from './modules/assignment/assignment.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { FinalGradeModule } from './modules/final-grade/final-grade.module';
     GroupModule,
     SubjectModule,
     FinalGradeModule,
+    AssignmentModule,
   ],
   controllers: [],
   providers: [],
