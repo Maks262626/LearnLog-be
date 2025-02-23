@@ -14,6 +14,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
+import { Attendance } from 'src/modules/attendance/entities/attendance.entity';
 import { Faculty } from 'src/modules/faculty/entities/faculty.entity';
 import { FinalGrade } from 'src/modules/final-grade/entities/final-grade.entity';
 import { Grade } from 'src/modules/grade/entities/grade.entity';
@@ -103,6 +104,9 @@ export class User extends Model<User> {
 
   @HasMany(()=>FinalGrade)
   finalGrades: FinalGrade[];
+
+  @HasMany(()=> Attendance)
+  attendances: Attendance[];
 
   @ApiProperty()
   @CreatedAt

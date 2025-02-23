@@ -14,6 +14,7 @@ import { StudentSubmissionModule } from './modules/student-submission/student-su
 import { GradeModule } from './modules/grade/grade.module';
 import { SubjectScheduleModule } from './modules/subject-schedule/subject-schedule.module';
 import { SubjectInstanceModule } from './modules/subject-instance/subject-instance.module';
+import { AttendanceModule } from './modules/attendance/attendance.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SubjectInstanceModule } from './modules/subject-instance/subject-instan
     GradeModule,
     SubjectScheduleModule,
     SubjectInstanceModule,
+    AttendanceModule,
   ],
   controllers: [],
   providers: [],

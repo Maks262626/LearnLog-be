@@ -1,7 +1,8 @@
 import { Optional } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { Attendance } from "src/modules/attendance/entities/attendance.entity";
 import { SubjectSchedule } from "src/modules/subject-schedule/entities/subject-schedule.entity";
 import { v4 } from "uuid";
 
@@ -58,6 +59,9 @@ export class SubjectInstance extends Model<SubjectInstance> {
 
   @BelongsTo(() => SubjectSchedule)
   subject_schedule: SubjectSchedule;
+
+  @HasMany(()=> Attendance)
+  attendances: Attendance[];
 
   @ApiProperty()
   @CreatedAt
