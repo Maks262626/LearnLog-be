@@ -13,6 +13,7 @@ import { AssignmentModule } from './modules/assignment/assignment.module';
 import { StudentSubmissionModule } from './modules/student-submission/student-submission.module';
 import { GradeModule } from './modules/grade/grade.module';
 import { SubjectScheduleModule } from './modules/subject-schedule/subject-schedule.module';
+import { SubjectInstanceModule } from './modules/subject-instance/subject-instance.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { SubjectScheduleModule } from './modules/subject-schedule/subject-schedu
     StudentSubmissionModule,
     GradeModule,
     SubjectScheduleModule,
+    SubjectInstanceModule,
   ],
   controllers: [],
   providers: [],

@@ -1,7 +1,8 @@
 import { Optional } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import sequelize from "sequelize";
-import { BelongsTo, Column, DataType, Default, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { SubjectInstance } from "src/modules/subject-instance/entities/subject-instance.entity";
 import { Subject } from "src/modules/subject/entities/subject.entity";
 import { v4 } from "uuid";
 
@@ -52,6 +53,21 @@ export class SubjectSchedule extends Model<SubjectSchedule>{
 
   @BelongsTo(() => Subject)
   subject: Subject;
+
+  @HasMany(()=> SubjectInstance)
+  subjectInstances: SubjectInstance[];
+
+  @ApiProperty()
+  @CreatedAt
+  declare created_at: Date;
+
+  @ApiProperty()
+  @UpdatedAt
+  declare updated_at: Date;
+
+  @ApiProperty()
+  @DeletedAt
+  declare deleted_at?: Date;
 }
 
 export const subjectScheduleProviders = [

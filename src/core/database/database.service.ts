@@ -6,6 +6,7 @@ import { FinalGrade } from 'src/modules/final-grade/entities/final-grade.entity'
 import { Grade } from 'src/modules/grade/entities/grade.entity';
 import { Group } from 'src/modules/group/entities/group.entity';
 import { StudentSubmission } from 'src/modules/student-submission/entities/student-submission.entity';
+import { SubjectInstance } from 'src/modules/subject-instance/entities/subject-instance.entity';
 import { SubjectSchedule } from 'src/modules/subject-schedule/entities/subject-schedule.entity';
 import { Subject } from 'src/modules/subject/entities/subject.entity';
 import { University } from 'src/modules/university/entities/university.entity';
@@ -23,7 +24,7 @@ export const databaseProviders = [
         password: configService.get<string>('db.password'),
         database: configService.get<string>('db.name'),
       });
-      sequelize.addModels([User, University, Faculty, Group, Subject, FinalGrade, Assignment,StudentSubmission,Grade,SubjectSchedule]);
+      sequelize.addModels([User, University, Faculty, Group, Subject, FinalGrade, Assignment,StudentSubmission,Grade,SubjectSchedule,SubjectInstance]);
       return sequelize;
     },
     inject: [ConfigService],
