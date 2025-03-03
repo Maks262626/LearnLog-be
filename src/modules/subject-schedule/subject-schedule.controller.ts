@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SubjectScheduleService } from './subject-schedule.service';
 import { CreateSubjectScheduleDto } from './dto/create-subject-schedule.dto';
 import { UpdateSubjectScheduleDto } from './dto/update-subject-schedule.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('subject-schedule')
+@ApiBearerAuth('JWT-auth')
 export class SubjectScheduleController {
   constructor(private readonly subjectScheduleService: SubjectScheduleService) {}
 

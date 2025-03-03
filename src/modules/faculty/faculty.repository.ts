@@ -15,29 +15,34 @@ export class FacultyRepository {
     return this.facultyRepository.create({ ...createFacultyDto });
   }
   async findAllFaculties(): Promise<Faculty[]> {
-    const universities = await this.facultyRepository.findAll();
-    return universities;
+    const faculties = await this.facultyRepository.findAll();
+    return faculties;
   }
   async findFaculty(id: string): Promise<Faculty> {
-    const university = await this.facultyRepository.findByPk(id);
-    return university;
+    const faculty = await this.facultyRepository.findByPk(id);
+    return faculty;
+  }
+  async findFacultyByUniversityId(id:string): Promise<Faculty[]> {
+    const faculties = await this.facultyRepository.findAll({where: {university_id:id}});
+    return faculties;
   }
   async updateFaculty(
     id: string,
     updateFacultyDto: UpdateFacultyDto,
   ): Promise<boolean> {
-    const university = await this.facultyRepository.update(
+    const faculty = await this.facultyRepository.update(
       updateFacultyDto,
       {
         where: { id },
       },
     );
-    return Boolean(university[0]);
+    return Boolean(faculty[0]);
   }
   async removeFaculty(id: string): Promise<boolean> {
-    const university = await this.facultyRepository.destroy({
+    const faculty = await this.facultyRepository.destroy({
       where: { id },
     });
-    return Boolean(university[0]);
+    return Boolean(faculty[0]);
   }
+
 }

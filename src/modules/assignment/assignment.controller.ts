@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AssignmentService } from './assignment.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('assignment')
+@ApiBearerAuth('JWT-auth')
 export class AssignmentController {
   constructor(private readonly assignmentService: AssignmentService) {}
 

@@ -16,8 +16,10 @@ import { CreateUserDto, SetRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserRoleName } from './entities/user.entity';
 import { UserService } from './user.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('user')
+@ApiBearerAuth('JWT-auth')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -54,9 +56,29 @@ export class UserController {
     return this.userService.findUser(id);
   }
 
+  @Get('university/:id')
+  findUsersFromUniversity(id: string): Promise<User[]> {
+    return this.userService.findUsersFromUniversity(id);
+  }
+
+  @Get('faculty/:id')
+  findUsersFromFaculty(id: string): Promise<User[]> {
+    return this.userService.findUsersFromFaculty(id);
+  }
+
+  @Get('group/:id')
+  findUsersFromGroup(id: string): Promise<User[]> {
+    return this.userService.findUsersFromGroup(id);
+  }
+
   @Patch(':id')
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(id, updateUserDto);
+  }
+
+  @Patch('approve/:id')
+  approveUser(@Param('id') id: string){
+    return this.userService.approveUser(id);
   }
 
   @Patch('/role/:id')

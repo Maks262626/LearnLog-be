@@ -26,4 +26,9 @@ export class CreateUserDto {
   @IsOptional()
   @IsBoolean()
   is_registration_completed?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  is_approved?: boolean;
 }

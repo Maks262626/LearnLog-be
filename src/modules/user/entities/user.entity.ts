@@ -59,6 +59,13 @@ export class User extends Model<User> {
   @Column(DataType.BOOLEAN)
   is_registration_completed: boolean;
 
+  @ApiProperty()
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false, 
+  })
+  is_approved: boolean;
+
   @Column({
     type: DataType.UUID,
     allowNull: true,

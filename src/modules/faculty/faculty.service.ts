@@ -24,4 +24,8 @@ export class FacultyService {
   remove(id: string) {
     return this.facultyRepository.removeFaculty(id)
   }
+
+  getFacultiesByUniversityId(id:string) {
+    return this.facultyRepository.findFacultyByUniversityId(id);
+  }
 }

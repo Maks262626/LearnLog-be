@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AttendanceService } from './attendance.service';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
 import { UpdateAttendanceDto } from './dto/update-attendance.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('attendance')
+@ApiBearerAuth('JWT-auth')
 export class AttendanceController {
   constructor(private readonly attendanceService: AttendanceService) {}
 

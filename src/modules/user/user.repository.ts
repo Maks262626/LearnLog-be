@@ -16,6 +16,18 @@ export class UserRepository {
     const users = await this.usersRepository.findAll();
     return users;
   }
+  async findUsersFromUniversity(id: string): Promise<User[]> {
+    const users = await this.usersRepository.findAll({where:{university_id:id}});
+    return users;
+  }
+  async findUsersFromFaculty(id: string): Promise<User[]> {
+    const users = await this.usersRepository.findAll({where:{faculty_id:id}});
+    return users;
+  }
+  async findUsersFromGroup(id: string): Promise<User[]> {
+    const users = await this.usersRepository.findAll({where:{group_id:id}});
+    return users;
+  }
   async findUser(id: string): Promise<User> {
     const user = await this.usersRepository.findByPk(id);
     return user;
@@ -42,4 +54,5 @@ export class UserRepository {
     });
     return user;
   }
+
 }

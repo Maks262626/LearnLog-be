@@ -106,4 +106,20 @@ export class UserService {
       throw new BadRequestException(ErrorMap.AUTH_ERROR);
     }
   }
+
+  async findUsersFromUniversity(id: string): Promise<User[]> {
+    const users = await this.usersRepository.findUsersFromUniversity(id);
+    return users;
+  }
+  async findUsersFromFaculty(id: string): Promise<User[]> {
+    const users = await this.usersRepository.findUsersFromFaculty(id);
+    return users;
+  }
+  async findUsersFromGroup(id: string): Promise<User[]> {
+    const users = await this.usersRepository.findUsersFromGroup(id);
+    return users;
+  }
+  async approveUser(id: string): Promise<boolean> {
+    return this.usersRepository.updateUser(id,{is_approved:true});
+  }
 }

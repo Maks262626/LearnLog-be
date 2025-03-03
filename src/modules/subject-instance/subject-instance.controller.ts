@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SubjectInstanceService } from './subject-instance.service';
 import { CreateSubjectInstanceDto } from './dto/create-subject-instance.dto';
 import { UpdateSubjectInstanceDto } from './dto/update-subject-instance.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('subject-instance')
+@ApiBearerAuth('JWT-auth')
 export class SubjectInstanceController {
   constructor(private readonly subjectInstanceService: SubjectInstanceService) {}
 

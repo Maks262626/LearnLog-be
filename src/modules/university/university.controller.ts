@@ -13,9 +13,11 @@ import { UserRoleName } from '../user/entities/user.entity';
 import { CreateUniversityDto } from './dto/create-university.dto';
 import { UpdateUniversityDto } from './dto/update-university.dto';
 import { UniversityService } from './university.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(Role(UserRoleName.SUPERADMIN))
 @Controller('university')
+@ApiBearerAuth('JWT-auth')
 export class UniversityController {
   constructor(private readonly universityService: UniversityService) {}
 

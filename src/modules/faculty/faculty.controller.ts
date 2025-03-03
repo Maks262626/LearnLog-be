@@ -4,9 +4,11 @@ import { CreateFacultyDto } from './dto/create-faculty.dto';
 import { UpdateFacultyDto } from './dto/update-faculty.dto';
 import { Role } from 'src/core/authz/role.guard';
 import { UserRoleName } from '../user/entities/user.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(Role(UserRoleName.SUPERADMIN))
 @Controller('faculty')
+@ApiBearerAuth('JWT-auth')
 export class FacultyController {
   constructor(private readonly facultyService: FacultyService) {}
 
@@ -23,6 +25,11 @@ export class FacultyController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.facultyService.findOne(id);
+  }
+
+  @Get('/get-by-uni-id/:id')
+  findFacultiesByUniversityId(@Param('id') id: string) {
+    return this.facultyService.getFacultiesByUniversityId(id);
   }
 
   @Patch(':id')

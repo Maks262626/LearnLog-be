@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { FinalGradeService } from './final-grade.service';
 import { CreateFinalGradeDto } from './dto/create-final-grade.dto';
 import { UpdateFinalGradeDto } from './dto/update-final-grade.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('final-grade')
+@ApiBearerAuth('JWT-auth')
 export class FinalGradeController {
   constructor(private readonly finalGradeService: FinalGradeService) {}
 

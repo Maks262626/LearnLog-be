@@ -4,9 +4,11 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Role } from 'src/core/authz/role.guard';
 import { UserRoleName } from '../user/entities/user.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(Role(UserRoleName.SUPERADMIN))
 @Controller('group')
+@ApiBearerAuth('JWT-auth')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
