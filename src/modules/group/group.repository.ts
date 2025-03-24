@@ -18,6 +18,11 @@ export class GroupRepository {
     return groups;
   }
 
+  async findGroupsByFacultyId(id: string): Promise<Group[]> {
+    const groups = await this.groupRepository.findAll({where: {faculty_id:id}});
+    return groups;
+  }
+
   async findGroup(id: string): Promise<Group> {
     const group = await this.groupRepository.findByPk(id);
     return group;

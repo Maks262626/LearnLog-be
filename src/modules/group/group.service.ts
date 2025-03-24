@@ -16,6 +16,10 @@ export class GroupService {
     return this.groupRepository.findAllGroups();
   }
 
+  findGroupsByFacultyId(id: string): Promise<Group[]> {
+    return this.groupRepository.findGroupsByFacultyId(id);
+  }
+
   findOne(id: string): Promise<Group> {
     return this.groupRepository.findGroup(id);
   }

@@ -23,17 +23,8 @@ export class UserService {
     return this.usersRepository.createUser(createUserDto);
   }
 
-  async findAllUsers(role: string) {
-    switch (role) {
-      case UserRoleName.SUPERADMIN:
-      case UserRoleName.TEACHER:
-        return this.usersRepository.findAllUsers();
-      case UserRoleName.STUDENT:
-        const users = await this.usersRepository.findAllUsers();
-        return [users[0]];
-      default:
-        break;
-    }
+  async findAllUsers() {
+    return this.usersRepository.findAllUsers();
   }
 
   findUser(id: string) {
@@ -44,7 +35,9 @@ export class UserService {
     return this.usersRepository.updateUser(id, updateUserDto);
   }
 
-  removeUser(id: string) {
+  async removeUser(id: string) {
+    const user = await this.findUser(id);
+    this.authzService.deleteUserAuth0(user.auth0_user_id);
     return this.usersRepository.deleteUser(id);
   }
 
@@ -87,10 +80,9 @@ export class UserService {
       (role === UserRoleName.MANAGER &&
         setRoleDto.role !== UserRoleName.SUPERADMIN)
     ) {
-      console.log('role', role);
-
       this.authzService.setUserRoleAuth0(userId, setRoleDto);
       this.usersRepository.updateUserRole(userId, setRoleDto.role);
+      this.approveUser(userId);
     }
   }
   async register(createUserDto: CreateUserDto): Promise<Partial<User>> {

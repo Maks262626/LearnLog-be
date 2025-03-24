@@ -42,13 +42,14 @@ export class UserController {
   @Get('me')
   async userMe(@CurrentUser() user: User): Promise<Partial<User>> {
     const { auth0_user_id } = user;
+    
     return this.userService.getUserMe(auth0_user_id);
   }
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get()
-  async findAllUsers(@UserRole() role: string): Promise<User[]> {
-    return this.userService.findAllUsers(role);
+  async findAllUsers(): Promise<User[]> {
+    return this.userService.findAllUsers();
   }
 
   @Get(':id')
@@ -57,17 +58,17 @@ export class UserController {
   }
 
   @Get('university/:id')
-  findUsersFromUniversity(id: string): Promise<User[]> {
+  findUsersFromUniversity(@Param('id') id: string): Promise<User[]> {
     return this.userService.findUsersFromUniversity(id);
   }
 
   @Get('faculty/:id')
-  findUsersFromFaculty(id: string): Promise<User[]> {
+  findUsersFromFaculty(@Param('id') id: string): Promise<User[]> {
     return this.userService.findUsersFromFaculty(id);
   }
 
   @Get('group/:id')
-  findUsersFromGroup(id: string): Promise<User[]> {
+  findUsersFromGroup(@Param('id') id: string): Promise<User[]> {
     return this.userService.findUsersFromGroup(id);
   }
 
@@ -82,7 +83,7 @@ export class UserController {
   }
 
   @Patch('/role/:id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('jwt'),RolesGuard)
   async setUserRole(
     @Param('id') userId: string,
     @Body() setRoleDto: SetRoleDto,

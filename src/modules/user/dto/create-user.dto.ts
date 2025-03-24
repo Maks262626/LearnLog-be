@@ -31,4 +31,20 @@ export class CreateUserDto {
   @IsOptional()
   @IsBoolean()
   is_approved?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  university_id?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  faculty_id?: string;
+  
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  group_id?: string;
+
 }

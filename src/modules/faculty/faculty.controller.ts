@@ -6,7 +6,7 @@ import { Role } from 'src/core/authz/role.guard';
 import { UserRoleName } from '../user/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-@UseGuards(Role(UserRoleName.SUPERADMIN))
+// @UseGuards(Role(UserRoleName.SUPERADMIN))
 @Controller('faculty')
 @ApiBearerAuth('JWT-auth')
 export class FacultyController {

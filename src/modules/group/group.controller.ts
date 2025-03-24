@@ -6,7 +6,7 @@ import { Role } from 'src/core/authz/role.guard';
 import { UserRoleName } from '../user/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-@UseGuards(Role(UserRoleName.SUPERADMIN))
+// @UseGuards(Role(UserRoleName.SUPERADMIN))
 @Controller('group')
 @ApiBearerAuth('JWT-auth')
 export class GroupController {
@@ -20,6 +20,11 @@ export class GroupController {
   @Get()
   findAll() {
     return this.groupService.findAll();
+  }
+
+  @Get('get-by-faculty-id/:id')
+  findGroupsByFacultyId(@Param('id') id: string) {
+    return this.groupService.findGroupsByFacultyId(id);
   }
 
   @Get(':id')

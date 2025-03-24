@@ -21,7 +21,7 @@ export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const auth0UserId = request.user.auth0_user_id;
-
+    
     try {
       const roles = await this.authzService.getUserRolesAuth0(auth0UserId);
 
@@ -31,7 +31,6 @@ export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
         );
       }
       request.user.role = roles[0];
-      console.log(request.user);
 
       return true;
     } catch (error) {

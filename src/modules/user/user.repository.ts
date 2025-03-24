@@ -2,12 +2,13 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserRoleName } from './entities/user.entity';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UserRepository {
   constructor(
     @Inject('USER_REPOSITORY') private usersRepository: typeof User,
-  ) {}
+  ) { }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     return this.usersRepository.create({ ...createUserDto });
@@ -17,15 +18,27 @@ export class UserRepository {
     return users;
   }
   async findUsersFromUniversity(id: string): Promise<User[]> {
-    const users = await this.usersRepository.findAll({where:{university_id:id}});
+    const users = await this.usersRepository.findAll({ where: { university_id: id } });
     return users;
   }
   async findUsersFromFaculty(id: string): Promise<User[]> {
-    const users = await this.usersRepository.findAll({where:{faculty_id:id}});
+    const users = await this.usersRepository.findAll({
+      where: {
+        [Op.and]: [
+          { faculty_id: id },
+          {
+            [Op.or]: [
+              { role: { [Op.not]: 'manager' } },
+              { role: { [Op.is]: null } }
+            ]
+          }
+        ]
+      }
+    });
     return users;
   }
   async findUsersFromGroup(id: string): Promise<User[]> {
-    const users = await this.usersRepository.findAll({where:{group_id:id}});
+    const users = await this.usersRepository.findAll({ where: { group_id: id } });
     return users;
   }
   async findUser(id: string): Promise<User> {

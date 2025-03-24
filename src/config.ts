@@ -12,6 +12,7 @@ const config = {
     name: process.env.DB_NAME,
   },
   auth: {
+    domain: process.env.AUTH0_DOMAIN,
     issuer: process.env.AUTH0_ISSUER_URL,
     audience: process.env.AUTH0_AUDIENCE,
     clientId: process.env.AUTH0_CLIENT_ID,
