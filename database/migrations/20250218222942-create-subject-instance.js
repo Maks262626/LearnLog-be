@@ -17,7 +17,7 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'completed', 'canceled'),
+        type: Sequelize.ENUM('pending', 'completed', 'cancelled'),
         allowNull: false,
       },
       location: {
@@ -28,11 +28,23 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      schedule_id: {
+      date: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      start_time: {
+        type: Sequelize.TIME,
+        allowNull: false,
+      },
+      end_time: {
+        type: Sequelize.TIME,
+        allowNull: false,
+      },
+      subject_id: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'subject_schedules',
+          model: 'subjects',
           key: 'id',
         },
         onDelete: 'CASCADE',

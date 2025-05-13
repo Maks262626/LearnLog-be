@@ -1,15 +1,29 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsOptional, IsString } from "class-validator";
-import { SubjectInstanceStatus, SubjectInstanceType } from "../entities/subject-instance.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+import { SubjectInstanceStatus, SubjectInstanceType } from '../entities/subject-instance.entity';
 
 export class CreateSubjectInstanceDto {
   @ApiProperty()
   @IsString()
-  schedule_id: string;
+  subject_id: string;
 
   @ApiProperty()
   @IsString()
   name: string;
+
+  @ApiProperty()
+  @IsString()
+  start_time: string;
+
+  @ApiProperty()
+  @IsString()
+  end_time: string;
+
+  @ApiProperty()
+  @IsDate()
+  @Type(() => Date)
+  date: Date;
 
   @ApiProperty({ enum: SubjectInstanceType })
   @IsEnum(SubjectInstanceType)

@@ -1,60 +1,54 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from 'src/core/authz/authz-role.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
-import { UserRole } from 'src/shared/decorators/user-role.decorator';
+import { Role } from 'src/shared/guards/role.guard';
 import { CreateUserDto, SetRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserRoleName } from './entities/user.entity';
 import { UserService } from './user.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('user')
 @ApiBearerAuth('JWT-auth')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('register')
-  @UseGuards(AuthGuard('jwt'))
-  async registerUser(
-    @CurrentUser() user: User,
-    @Body() createUserDto: CreateUserDto,
-  ) {
+  async registerUser(@CurrentUser() user: User, @Body() createUserDto: CreateUserDto) {
     const { auth0_user_id } = user;
     return this.userService.register({ ...createUserDto, auth0_user_id });
   }
-  @Post()
-  @UseGuards(AuthGuard('jwt'))
-  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.createUser({ ...createUserDto });
-  }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('me')
+  @Get('/me')
   async userMe(@CurrentUser() user: User): Promise<Partial<User>> {
     const { auth0_user_id } = user;
-    
-    return this.userService.getUserMe(auth0_user_id);
+
+    return this.userService.getMe(auth0_user_id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get()
   async findAllUsers(): Promise<User[]> {
     return this.userService.findAllUsers();
   }
 
+  @UseGuards(Role(UserRoleName.MANAGER))
+  @Get('/teachers/:id')
+  async getTeachersByFacultyId(@Param('id') id: string): Promise<User[]> {
+    return this.userService.getTeachersByFacultyId(id);
+  }
+
+  @UseGuards(Role(UserRoleName.STUDENT))
+  @Get('/in-my-group')
+  findUsersInMyGroup(@CurrentUser() user: User): Promise<User[]> {
+    const { group_id } = user;
+    return this.userService.findUsersFromGroup(group_id, user);
+  }
+
+  @UseGuards(Role(UserRoleName.MANAGER))
   @Get(':id')
-  findUser(@Param('id') id: string) {
-    return this.userService.findUser(id);
+  findUser(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.userService.findUserWithPolicy(id, user);
   }
 
   @Get('university/:id')
@@ -67,9 +61,17 @@ export class UserController {
     return this.userService.findUsersFromFaculty(id);
   }
 
+  @UseGuards(Role(UserRoleName.MANAGER))
+  @Get('/in-my-faculty')
+  findUsersFromMyFaculty(@CurrentUser() user: User): Promise<User[]> {
+    const { faculty_id } = user;
+    return this.userService.findUsersFromFaculty(faculty_id);
+  }
+
+  @UseGuards(Role(UserRoleName.MANAGER, UserRoleName.TEACHER))
   @Get('group/:id')
-  findUsersFromGroup(@Param('id') id: string): Promise<User[]> {
-    return this.userService.findUsersFromGroup(id);
+  findUsersFromGroup(@Param('id') id: string, @CurrentUser() user: User): Promise<User[]> {
+    return this.userService.findUsersFromGroup(id, user);
   }
 
   @Patch(':id')
@@ -77,23 +79,19 @@ export class UserController {
     return this.userService.updateUser(id, updateUserDto);
   }
 
-  @Patch('approve/:id')
-  approveUser(@Param('id') id: string){
-    return this.userService.approveUser(id);
-  }
-
   @Patch('/role/:id')
-  @UseGuards(AuthGuard('jwt'),RolesGuard)
+  @UseGuards(Role(UserRoleName.MANAGER))
   async setUserRole(
     @Param('id') userId: string,
     @Body() setRoleDto: SetRoleDto,
-    @UserRole() role: UserRoleName,
+    @CurrentUser() user: User,
   ): Promise<void> {
-    this.userService.setUserRole(userId, setRoleDto, role);
+    this.userService.setUserRole(userId, setRoleDto, user);
   }
 
+  @UseGuards(Role(UserRoleName.MANAGER))
   @Delete(':id')
-  removeUser(@Param('id') id: string) {
-    return this.userService.removeUser(id);
+  removeUser(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.userService.removeUser(id, user);
   }
 }

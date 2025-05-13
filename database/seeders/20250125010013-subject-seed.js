@@ -11,7 +11,7 @@ module.exports = {
       {
         id: v4(),
         name: 'Mathematics',
-        desciption: 'An introduction to algebra, calculus, and geometry.',
+        description: 'An introduction to algebra, calculus, and geometry.',
         type: 'exam',
         group_id: groupId,
         teacher_id: teacherId,
@@ -21,7 +21,7 @@ module.exports = {
       {
         id: v4(),
         name: 'Physics',
-        desciption: 'Learn about the laws of motion, energy, and matter.',
+        description: 'Learn about the laws of motion, energy, and matter.',
         type: 'credit',
         group_id: groupId,
         teacher_id: teacherId,
@@ -31,7 +31,7 @@ module.exports = {
       {
         id: v4(),
         name: 'Computer Science',
-        desciption: 'Introduction to programming and computer systems.',
+        description: 'Introduction to programming and computer systems.',
         type: 'exam',
         group_id: groupId,
         teacher_id: teacherId,

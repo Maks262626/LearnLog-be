@@ -1,13 +1,26 @@
-import { Optional } from "@nestjs/common";
-import { ApiProperty } from "@nestjs/swagger";
-import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { Subject } from "src/modules/subject/entities/subject.entity";
-import { User } from "src/modules/user/entities/user.entity";
-import { v4 } from "uuid";
+import { Optional } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
+import sequelize from 'sequelize';
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Subject } from 'src/modules/subject/entities/subject.entity';
+import { User } from 'src/modules/user/entities/user.entity';
+import { v4 } from 'uuid';
 
 @Table({ tableName: 'final_grades' })
-export class FinalGrade extends Model<FinalGrade>{
+export class FinalGrade extends Model<FinalGrade> {
   @PrimaryKey
   @ApiProperty()
   @Default(DataType.UUIDV4)
@@ -15,10 +28,11 @@ export class FinalGrade extends Model<FinalGrade>{
   id: string;
 
   @ApiProperty()
+  @AllowNull(true)
   @Column(DataType.INTEGER)
-  final_grade: number;
+  final_grade: number | null;
 
-  @ApiProperty({required:false})
+  @ApiProperty({ required: false })
   @Optional()
   @Column(DataType.INTEGER)
   exam_grade?: number;
@@ -59,7 +73,7 @@ export const finalGradeProviders = [
     hooks: {
       BeforeCreate: (entity: FinalGrade) => {
         entity.id = v4();
-      }
-    }
-  }
-]
+      },
+    },
+  },
+];

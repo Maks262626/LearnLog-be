@@ -19,9 +19,7 @@ export const CurrentUser = createParamDecorator(
       throw new UnauthorizedException('UnauthorizedException');
     }
 
-    logger.log(
-      `CurrentUser with ID ${user.auth0_user_id} was found in request`,
-    );
+    logger.log(`CurrentUser with ID ${user.auth0_user_id} was found in request`);
     return user;
   },
 );

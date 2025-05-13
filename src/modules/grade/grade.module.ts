@@ -1,13 +1,14 @@
-import { Module } from '@nestjs/common';
-import { GradeService } from './grade.service';
+import { forwardRef, Module } from '@nestjs/common';
+import { DatabaseModule } from 'src/core/database/database.module';
+import { UserModule } from '../user/user.module';
+import { gradeProviders } from './entities/grade.entity';
 import { GradeController } from './grade.controller';
 import { GradeRepository } from './grade.repository';
-import { gradeProviders } from './entities/grade.entity';
-import { DatabaseModule } from 'src/core/database/database.module';
+import { GradeService } from './grade.service';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, forwardRef(() => UserModule)],
   controllers: [GradeController],
-  providers: [GradeService,GradeRepository,...gradeProviders],
+  providers: [GradeService, GradeRepository, ...gradeProviders],
 })
 export class GradeModule {}

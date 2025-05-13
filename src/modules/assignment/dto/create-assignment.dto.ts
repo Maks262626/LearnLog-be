@@ -1,5 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsDate, IsString } from 'class-validator';
 
 export class CreateAssignmentDto {
   @ApiProperty()
@@ -8,10 +9,11 @@ export class CreateAssignmentDto {
 
   @ApiProperty()
   @IsString()
-  desciption: string;
+  description: string;
 
   @ApiProperty()
   @IsDate()
+  @Type(() => Date)
   due_date: Date;
 
   @ApiProperty()

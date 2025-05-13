@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsString } from "class-validator";
-import { SubjectType } from "../entities/subject.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsString } from 'class-validator';
+import { SubjectType } from '../entities/subject.entity';
 
 export class CreateSubjectDto {
   @ApiProperty()
@@ -9,7 +9,7 @@ export class CreateSubjectDto {
 
   @ApiProperty()
   @IsString()
-  desciption: string;
+  description: string;
 
   @ApiProperty({ enum: SubjectType })
   @IsEnum(SubjectType)

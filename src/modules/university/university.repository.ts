@@ -9,29 +9,21 @@ export class UniversityRepository {
     @Inject('UNIVERSITY_REPOSITORY')
     private universityRepository: typeof University,
   ) {}
-  async createUniversity(
-    createUniversityDto: CreateUniversityDto,
-  ): Promise<University> {
+  async createUniversity(createUniversityDto: CreateUniversityDto): Promise<University> {
     return this.universityRepository.create({ ...createUniversityDto });
   }
   async findAllUniversities(): Promise<University[]> {
-    const universities = await this.universityRepository.findAll(); 
+    const universities = await this.universityRepository.findAll();
     return universities;
   }
   async findUniversity(id: string): Promise<University> {
     const university = await this.universityRepository.findByPk(id);
     return university;
   }
-  async updateUniversity(
-    id: string,
-    updateUniversityDto: UpdateUniversityDto,
-  ): Promise<boolean> {
-    const university = await this.universityRepository.update(
-      updateUniversityDto,
-      {
-        where: { id },
-      },
-    );
+  async updateUniversity(id: string, updateUniversityDto: UpdateUniversityDto): Promise<boolean> {
+    const university = await this.universityRepository.update(updateUniversityDto, {
+      where: { id },
+    });
     return Boolean(university[0]);
   }
   async removeUniversity(id: string): Promise<boolean> {

@@ -1,18 +1,29 @@
-import { Optional } from "@nestjs/common";
-import { ApiProperty } from "@nestjs/swagger";
-import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { Assignment } from "src/modules/assignment/entities/assignment.entity";
-import { User } from "src/modules/user/entities/user.entity";
-import { v4 } from "uuid";
-
+import { Optional } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
+import sequelize from 'sequelize';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Assignment } from 'src/modules/assignment/entities/assignment.entity';
+import { User } from 'src/modules/user/entities/user.entity';
+import { v4 } from 'uuid';
 
 export enum StudentSubmissionStatus {
   PENDING = 'pending',
   REVIEWED = 'reviewed',
   GRADED = 'graded',
   RESUBMISSION_REQUESTED = 'resubmission_requested',
-  LATE_SUBMISSION = 'late_submission'
+  LATE_SUBMISSION = 'late_submission',
 }
 
 @Table({ tableName: 'student_submissions' })
@@ -38,7 +49,13 @@ export class StudentSubmission extends Model<StudentSubmission> {
 
   @ApiProperty({ enum: () => StudentSubmissionStatus })
   @Column({
-    type: DataType.ENUM('pending', 'reviewed', 'graded', 'resubmission_requested', 'late_submission'),
+    type: DataType.ENUM(
+      'pending',
+      'reviewed',
+      'graded',
+      'resubmission_requested',
+      'late_submission',
+    ),
     allowNull: false,
   })
   status: StudentSubmissionStatus;
@@ -79,7 +96,7 @@ export const studentSubmissionProviders = [
     hooks: {
       BeforeCreate: (entity: StudentSubmission) => {
         entity.id = v4();
-      }
-    }
-  }
-]
+      },
+    },
+  },
+];

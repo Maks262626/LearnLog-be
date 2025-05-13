@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { GroupService } from './group.service';
-import { GroupController } from './group.controller';
 import { DatabaseModule } from 'src/core/database/database.module';
-import { AuthzModule } from 'src/core/authz/authz.module';
-import { GroupRepository } from './group.repository';
+import { UserModule } from '../user/user.module';
 import { groupProviders } from './entities/group.entity';
+import { GroupController } from './group.controller';
+import { GroupRepository } from './group.repository';
+import { GroupService } from './group.service';
 
 @Module({
-  imports: [DatabaseModule,AuthzModule],
+  imports: [DatabaseModule, UserModule],
   controllers: [GroupController],
-  providers: [GroupService,GroupRepository,...groupProviders],
+  providers: [GroupService, GroupRepository, ...groupProviders],
+  exports: [GroupService, GroupRepository],
 })
 export class GroupModule {}

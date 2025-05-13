@@ -1,19 +1,30 @@
-import { ApiProperty } from "@nestjs/swagger";
-import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { SubjectInstance } from "src/modules/subject-instance/entities/subject-instance.entity";
-import { User } from "src/modules/user/entities/user.entity";
-import { v4 } from "uuid";
-
+import { ApiProperty } from '@nestjs/swagger';
+import sequelize from 'sequelize';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { SubjectInstance } from 'src/modules/subject-instance/entities/subject-instance.entity';
+import { User } from 'src/modules/user/entities/user.entity';
+import { v4 } from 'uuid';
 
 export enum AttendanceStatus {
   PRESENT = 'present',
   ABSENT = 'absent',
-  LATE = 'late'
+  LATE = 'late',
 }
 
 @Table({ tableName: 'attendances' })
-export class Attendance extends Model<Attendance>{
+export class Attendance extends Model<Attendance> {
   @PrimaryKey
   @ApiProperty()
   @Default(DataType.UUIDV4)
@@ -63,7 +74,7 @@ export const attendanceProviders = [
     hooks: {
       BeforeCreate: (entity: Attendance) => {
         entity.id = v4();
-      }
-    }
-  }
+      },
+    },
+  },
 ];

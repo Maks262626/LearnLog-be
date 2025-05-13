@@ -1,9 +1,9 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './shared/response/response.interceptors';
-import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,7 +15,6 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
-  
 
   const configService = app.get<ConfigService>(ConfigService);
   const port = configService.get<number>('app.port');
@@ -37,16 +36,18 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
-      persistAuthorization: true, 
+      persistAuthorization: true,
     },
   });
 
   app.useGlobalPipes(
     new ValidationPipe({
       disableErrorMessages: false,
+      whitelist: true,
+      transform: true,
     }),
   );
-  
+
   await app.listen(port, () => {
     console.log(`Server is running on port ${port}!`);
   });

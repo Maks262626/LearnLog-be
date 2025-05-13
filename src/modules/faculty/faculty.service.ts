@@ -5,12 +5,12 @@ import { FacultyRepository } from './faculty.repository';
 
 @Injectable()
 export class FacultyService {
-  constructor(private readonly facultyRepository: FacultyRepository){}
+  constructor(private readonly facultyRepository: FacultyRepository) {}
   create(createFacultyDto: CreateFacultyDto) {
-    return this.facultyRepository.createFaculty(createFacultyDto); 
+    return this.facultyRepository.createFaculty(createFacultyDto);
   }
   findAll() {
-    return this.facultyRepository.findAllFaculties(); 
+    return this.facultyRepository.findAllFaculties();
   }
 
   findOne(id: string) {
@@ -18,14 +18,14 @@ export class FacultyService {
   }
 
   update(id: string, updateFacultyDto: UpdateFacultyDto) {
-    return this.facultyRepository.updateFaculty(id,updateFacultyDto)
+    return this.facultyRepository.updateFaculty(id, updateFacultyDto);
   }
 
   remove(id: string) {
-    return this.facultyRepository.removeFaculty(id)
+    return this.facultyRepository.removeFaculty(id);
   }
 
-  getFacultiesByUniversityId(id:string) {
+  getFacultiesByUniversityId(id: string) {
     return this.facultyRepository.findFacultyByUniversityId(id);
   }
 }

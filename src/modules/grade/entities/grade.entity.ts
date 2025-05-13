@@ -1,21 +1,35 @@
-import { ApiProperty } from "@nestjs/swagger";
-import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { Assignment } from "src/modules/assignment/entities/assignment.entity";
-import { User } from "src/modules/user/entities/user.entity";
-import { v4 } from "uuid";
+import { ApiProperty } from '@nestjs/swagger';
+import sequelize from 'sequelize';
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Assignment } from 'src/modules/assignment/entities/assignment.entity';
+import { User } from 'src/modules/user/entities/user.entity';
+import { v4 } from 'uuid';
 
 @Table({ tableName: 'grades' })
-export class Grade extends Model<Grade>{
+export class Grade extends Model<Grade> {
   @PrimaryKey
   @ApiProperty()
   @Default(DataType.UUIDV4)
   @Column(DataType.STRING)
   id: string;
-  
+
   @ApiProperty()
+  @AllowNull(true)
   @Column(DataType.INTEGER)
-  grade_value: number;
+  grade_value: number | null;
 
   @Column(DataType.STRING)
   @ForeignKey(() => Assignment)
@@ -53,7 +67,7 @@ export const gradeProviders = [
     hooks: {
       BeforeCreate: (entity: Grade) => {
         entity.id = v4();
-      }
-    }
-  }
-]
+      },
+    },
+  },
+];

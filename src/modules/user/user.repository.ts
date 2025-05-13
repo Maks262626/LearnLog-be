@@ -1,14 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { Op } from 'sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserRoleName } from './entities/user.entity';
-import { Op } from 'sequelize';
 
 @Injectable()
 export class UserRepository {
-  constructor(
-    @Inject('USER_REPOSITORY') private usersRepository: typeof User,
-  ) { }
+  constructor(@Inject('USER_REPOSITORY') private usersRepository: typeof User) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     return this.usersRepository.create({ ...createUserDto });
@@ -18,7 +16,13 @@ export class UserRepository {
     return users;
   }
   async findUsersFromUniversity(id: string): Promise<User[]> {
-    const users = await this.usersRepository.findAll({ where: { university_id: id } });
+    const users = await this.usersRepository.findAll({
+      where: { university_id: id },
+      order: [
+        ['first_name', 'ASC'],
+        ['last_name', 'ASC'],
+      ],
+    });
     return users;
   }
   async findUsersFromFaculty(id: string): Promise<User[]> {
@@ -27,23 +31,36 @@ export class UserRepository {
         [Op.and]: [
           { faculty_id: id },
           {
-            [Op.or]: [
-              { role: { [Op.not]: 'manager' } },
-              { role: { [Op.is]: null } }
-            ]
-          }
-        ]
-      }
+            [Op.or]: [{ role: { [Op.not]: UserRoleName.MANAGER } }, { role: { [Op.is]: null } }],
+          },
+        ],
+      },
+      order: [
+        ['first_name', 'ASC'],
+        ['last_name', 'ASC'],
+      ],
     });
     return users;
   }
   async findUsersFromGroup(id: string): Promise<User[]> {
-    const users = await this.usersRepository.findAll({ where: { group_id: id } });
+    const users = await this.usersRepository.findAll({
+      where: { group_id: id },
+      order: [
+        ['first_name', 'ASC'],
+        ['last_name', 'ASC'],
+      ],
+    });
     return users;
   }
   async findUser(id: string): Promise<User> {
     const user = await this.usersRepository.findByPk(id);
     return user;
+  }
+  async getTeachersByFacultyId(faculty_id: string): Promise<User[]> {
+    const teachers = await this.usersRepository.findAll({
+      where: { role: UserRoleName.TEACHER, faculty_id },
+    });
+    return teachers;
   }
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<boolean> {
     const user = await this.usersRepository.update(updateUserDto, {
@@ -67,5 +84,4 @@ export class UserRepository {
     });
     return user;
   }
-
 }

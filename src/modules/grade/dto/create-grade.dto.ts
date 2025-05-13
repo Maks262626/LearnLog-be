@@ -1,10 +1,10 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsString } from 'class-validator';
 
 export class CreateGradeDto {
-  @ApiProperty()
+  @ApiProperty({ required: false, nullable: true })
   @IsInt()
-  grade_value: number;
+  grade_value?: number | null;
 
   @ApiProperty()
   @IsString()

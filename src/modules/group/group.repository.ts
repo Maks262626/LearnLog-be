@@ -8,7 +8,7 @@ export class GroupRepository {
   constructor(
     @Inject('GROUP_REPOSITORY')
     private groupRepository: typeof Group,
-  ) { }
+  ) {}
   async createGroup(createGroupDto: CreateGroupDto): Promise<Group> {
     return this.groupRepository.create({ ...createGroupDto });
   }
@@ -19,7 +19,9 @@ export class GroupRepository {
   }
 
   async findGroupsByFacultyId(id: string): Promise<Group[]> {
-    const groups = await this.groupRepository.findAll({where: {faculty_id:id}});
+    const groups = await this.groupRepository.findAll({
+      where: { faculty_id: id },
+    });
     return groups;
   }
 
@@ -29,12 +31,14 @@ export class GroupRepository {
   }
 
   async updateGroup(id: string, updateGroupDto: UpdateGroupDto): Promise<boolean> {
-    const group = await this.groupRepository.update(updateGroupDto, { where: { id } });
+    const group = await this.groupRepository.update(updateGroupDto, {
+      where: { id },
+    });
     return Boolean(group[0]);
   }
 
   async removeGroup(id: string): Promise<boolean> {
-    const group = await this.groupRepository.destroy({where:{id}});
+    const group = await this.groupRepository.destroy({ where: { id } });
     return Boolean(group[0]);
   }
 }

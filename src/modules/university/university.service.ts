@@ -2,13 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateUniversityDto } from './dto/create-university.dto';
 import { UpdateUniversityDto } from './dto/update-university.dto';
 import { UniversityRepository } from './university.repository';
-import { FacultyRepository } from '../faculty/faculty.repository';
 
 @Injectable()
 export class UniversityService {
-  constructor(
-    private readonly universityRepository: UniversityRepository,
-  ) {}
+  constructor(private readonly universityRepository: UniversityRepository) {}
   createUniversity(createUniversityDto: CreateUniversityDto) {
     return this.universityRepository.createUniversity(createUniversityDto);
   }

@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsEnum } from "class-validator";
-import { AttendanceStatus } from "../entities/attendance.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsString } from 'class-validator';
+import { AttendanceStatus } from '../entities/attendance.entity';
 
 export class CreateAttendanceDto {
   @ApiProperty()

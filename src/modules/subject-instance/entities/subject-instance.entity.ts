@@ -1,21 +1,35 @@
-import { Optional } from "@nestjs/common";
-import { ApiProperty } from "@nestjs/swagger";
-import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { Attendance } from "src/modules/attendance/entities/attendance.entity";
-import { SubjectSchedule } from "src/modules/subject-schedule/entities/subject-schedule.entity";
-import { v4 } from "uuid";
+import { Optional } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
+import sequelize from 'sequelize';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  ForeignKey,
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Attendance } from 'src/modules/attendance/entities/attendance.entity';
+import { Subject } from 'src/modules/subject/entities/subject.entity';
+import { v4 } from 'uuid';
 
 export enum SubjectInstanceType {
   LECTURE = 'lecture',
-  PRACTICE = 'practice'
+  PRACTICE = 'practice',
 }
 
 export enum SubjectInstanceStatus {
   PENDING = 'pending',
   COMPLETED = 'completed',
-  CANCELED = 'canceled'
+  CANCELED = 'cancelled',
 }
+export type Day = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
 
 @Table({ tableName: 'subject_instances' })
 export class SubjectInstance extends Model<SubjectInstance> {
@@ -29,6 +43,18 @@ export class SubjectInstance extends Model<SubjectInstance> {
   @Column(DataType.STRING)
   name: string;
 
+  @ApiProperty()
+  @Column(DataType.DATE)
+  date: Date;
+
+  @ApiProperty()
+  @Column(DataType.TIME)
+  start_time: string;
+
+  @ApiProperty()
+  @Column(DataType.TIME)
+  end_time: string;
+
   @ApiProperty({ enum: () => SubjectInstanceType })
   @Column({
     type: DataType.ENUM('lecture', 'practice'),
@@ -38,7 +64,7 @@ export class SubjectInstance extends Model<SubjectInstance> {
 
   @ApiProperty({ enum: () => SubjectInstanceStatus })
   @Column({
-    type: DataType.ENUM('pending', 'completed', 'canceled'),
+    type: DataType.ENUM('pending', 'completed', 'cancelled'),
     allowNull: false,
   })
   status: SubjectInstanceStatus;
@@ -54,13 +80,13 @@ export class SubjectInstance extends Model<SubjectInstance> {
   url?: string;
 
   @Column(DataType.STRING)
-  @ForeignKey(() => SubjectSchedule)
-  schedule_id: string;
+  @ForeignKey(() => Subject)
+  subject_id: string;
 
-  @BelongsTo(() => SubjectSchedule)
-  subject_schedule: SubjectSchedule;
+  @BelongsTo(() => Subject)
+  subject: Subject;
 
-  @HasMany(()=> Attendance)
+  @HasMany(() => Attendance)
   attendances: Attendance[];
 
   @ApiProperty()
@@ -85,7 +111,7 @@ export const subjectInstanceProviders = [
     hooks: {
       BeforeCreate: (entity: SubjectInstance) => {
         entity.id = v4();
-      }
-    }
-  }
+      },
+    },
+  },
 ];

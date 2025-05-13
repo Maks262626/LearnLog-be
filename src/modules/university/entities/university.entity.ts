@@ -28,10 +28,10 @@ export class University extends Model<University> {
   @Column(DataType.STRING)
   name: string;
 
-  @HasMany(()=>Faculty)
-  faculties: Faculty[]
+  @HasMany(() => Faculty)
+  faculties: Faculty[];
 
-  @HasMany(()=>User)
+  @HasMany(() => User)
   users: User[];
 
   @ApiProperty()

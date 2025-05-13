@@ -1,6 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsEnum, IsOptional, IsString } from "class-validator";
-import { StudentSubmissionStatus } from "../entities/student-submission.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+import { StudentSubmissionStatus } from '../entities/student-submission.entity';
 
 export class CreateStudentSubmissionDto {
   @ApiProperty()
@@ -9,6 +10,7 @@ export class CreateStudentSubmissionDto {
 
   @ApiProperty()
   @IsDate()
+  @Type(() => Date)
   submission_date: Date;
 
   @ApiProperty()
@@ -18,11 +20,12 @@ export class CreateStudentSubmissionDto {
 
   @ApiProperty({ enum: StudentSubmissionStatus })
   @IsEnum(StudentSubmissionStatus)
-  type: StudentSubmissionStatus;
+  status: StudentSubmissionStatus;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsString()
-  user_id: string;
+  user_id?: string;
 
   @ApiProperty()
   @IsString()

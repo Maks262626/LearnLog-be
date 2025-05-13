@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsOptional, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateFinalGradeDto {
   @ApiProperty()
@@ -12,8 +12,8 @@ export class CreateFinalGradeDto {
 
   @ApiProperty()
   @IsInt()
-  final_grade: number;
-  
+  final_grade?: number | null;
+
   @ApiProperty()
   @IsInt()
   @IsOptional()

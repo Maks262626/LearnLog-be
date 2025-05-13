@@ -1,4 +1,3 @@
-import { HttpModule } from '@nestjs/axios';
 import { forwardRef, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from 'src/modules/user/user.module';
@@ -10,7 +9,6 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     DatabaseModule,
-    HttpModule,
     forwardRef(() => UserModule),
   ],
   providers: [JwtStrategy, AuthzService],

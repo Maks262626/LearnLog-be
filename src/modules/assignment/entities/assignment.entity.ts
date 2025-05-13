@@ -1,13 +1,26 @@
-import { ApiProperty } from "@nestjs/swagger";
-import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { Grade } from "src/modules/grade/entities/grade.entity";
-import { StudentSubmission } from "src/modules/student-submission/entities/student-submission.entity";
-import { Subject } from "src/modules/subject/entities/subject.entity";
-import { v4 } from "uuid";
+import { ApiProperty } from '@nestjs/swagger';
+import sequelize from 'sequelize';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  ForeignKey,
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Grade } from 'src/modules/grade/entities/grade.entity';
+import { StudentSubmission } from 'src/modules/student-submission/entities/student-submission.entity';
+import { Subject } from 'src/modules/subject/entities/subject.entity';
+import { v4 } from 'uuid';
 
 @Table({ tableName: 'assignments' })
-export class Assignment extends Model<Assignment>{
+export class Assignment extends Model<Assignment> {
   @PrimaryKey
   @ApiProperty()
   @Default(DataType.UUIDV4)
@@ -20,7 +33,7 @@ export class Assignment extends Model<Assignment>{
 
   @ApiProperty()
   @Column(DataType.STRING)
-  desciption: string;
+  description: string;
 
   @ApiProperty()
   @Column(DataType.DATE)
@@ -29,14 +42,14 @@ export class Assignment extends Model<Assignment>{
   @Column(DataType.STRING)
   @ForeignKey(() => Subject)
   subject_id: string;
- 
+
   @BelongsTo(() => Subject)
   subject: Subject;
 
-  @HasMany(()=>StudentSubmission)
+  @HasMany(() => StudentSubmission)
   studentSubmissions: StudentSubmission[];
 
-  @HasMany(()=>Grade)
+  @HasMany(() => Grade)
   grades: Grade[];
 
   @ApiProperty()
@@ -61,7 +74,7 @@ export const assignmentProviders = [
     hooks: {
       BeforeCreate: (entity: Assignment) => {
         entity.id = v4();
-      }
-    }
-  }
-]
+      },
+    },
+  },
+];

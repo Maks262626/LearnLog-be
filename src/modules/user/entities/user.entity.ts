@@ -62,7 +62,7 @@ export class User extends Model<User> {
   @ApiProperty()
   @Column({
     type: DataType.BOOLEAN,
-    defaultValue: false, 
+    defaultValue: false,
   })
   is_approved: boolean;
 
@@ -96,23 +96,23 @@ export class User extends Model<User> {
 
   @BelongsTo(() => Faculty)
   faculty: Faculty;
-  
+
   @BelongsTo(() => University)
   university: University;
 
   @BelongsTo(() => Group)
   group: Group;
 
-  @HasMany(()=>StudentSubmission)
+  @HasMany(() => StudentSubmission)
   studentSubmissions: StudentSubmission[];
 
-  @HasMany(()=>Grade)
+  @HasMany(() => Grade)
   grades: Grade[];
 
-  @HasMany(()=>FinalGrade)
+  @HasMany(() => FinalGrade)
   finalGrades: FinalGrade[];
 
-  @HasMany(()=> Attendance)
+  @HasMany(() => Attendance)
   attendances: Attendance[];
 
   @ApiProperty()

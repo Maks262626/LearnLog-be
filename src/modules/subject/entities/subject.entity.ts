@@ -1,15 +1,29 @@
-import { ApiProperty } from "@nestjs/swagger";
-import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { Assignment } from "src/modules/assignment/entities/assignment.entity";
-import { FinalGrade } from "src/modules/final-grade/entities/final-grade.entity";
-import { Group } from "src/modules/group/entities/group.entity";
-import { User } from "src/modules/user/entities/user.entity";
-import { v4 } from "uuid";
+import { ApiProperty } from '@nestjs/swagger';
+import sequelize from 'sequelize';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  ForeignKey,
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Assignment } from 'src/modules/assignment/entities/assignment.entity';
+import { FinalGrade } from 'src/modules/final-grade/entities/final-grade.entity';
+import { Group } from 'src/modules/group/entities/group.entity';
+import { SubjectInstance } from 'src/modules/subject-instance/entities/subject-instance.entity';
+import { User } from 'src/modules/user/entities/user.entity';
+import { v4 } from 'uuid';
 
 export enum SubjectType {
   EXAM = 'exam',
-  CREDIT = 'credit'
+  CREDIT = 'credit',
 }
 
 @Table({ tableName: 'subjects' })
@@ -26,7 +40,7 @@ export class Subject extends Model<Subject> {
 
   @ApiProperty()
   @Column(DataType.STRING)
-  desciption: string;
+  description: string;
 
   @ApiProperty({ enum: () => SubjectType })
   @Column({
@@ -43,13 +57,19 @@ export class Subject extends Model<Subject> {
   @ForeignKey(() => User)
   teacher_id: string;
 
+  @BelongsTo(() => User)
+  teacher: User;
+
   @BelongsTo(() => Group)
   group: Group;
 
-  @HasMany(()=>Assignment)
+  @HasMany(() => SubjectInstance)
+  subjectInstances: SubjectInstance[];
+
+  @HasMany(() => Assignment)
   assignments: Assignment[];
 
-  @HasMany(()=>FinalGrade)
+  @HasMany(() => FinalGrade)
   finalGrades: FinalGrade[];
 
   @ApiProperty()
@@ -68,13 +88,13 @@ export class Subject extends Model<Subject> {
 export const subjectProviders = [
   {
     provide: 'SUBJECT_REPOSITORY',
-    useValue: Group,
+    useValue: Subject,
     sequelize,
     modelName: 'Subject',
     hooks: {
       BeforeCreate: (entity: Subject) => {
         entity.id = v4();
-      }
-    }
-  }
-]
+      },
+    },
+  },
+];

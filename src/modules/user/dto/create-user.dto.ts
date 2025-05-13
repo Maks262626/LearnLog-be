@@ -41,10 +41,9 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   faculty_id?: string;
-  
+
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   group_id?: string;
-
 }

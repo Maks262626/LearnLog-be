@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ErrorMap } from 'src/shared/response/error.map';
+import { User } from '../user/entities/user.entity';
+import { UserPolicyService } from '../user/user-policy.service';
 import { CreateFinalGradeDto } from './dto/create-final-grade.dto';
 import { UpdateFinalGradeDto } from './dto/update-final-grade.dto';
-import { FinalGradeRepository } from './final-grade.repository';
 import { FinalGrade } from './entities/final-grade.entity';
+import { FinalGradeRepository } from './final-grade.repository';
 
 @Injectable()
 export class FinalGradeService {
-  constructor(private readonly finalGradeRepository: FinalGradeRepository) { }
+  constructor(
+    private readonly policy: UserPolicyService,
+    private readonly finalGradeRepository: FinalGradeRepository,
+  ) {}
 
   create(createFinalGradeDto: CreateFinalGradeDto): Promise<FinalGrade> {
     return this.finalGradeRepository.createFinalGrade(createFinalGradeDto);
@@ -20,8 +26,15 @@ export class FinalGradeService {
     return this.finalGradeRepository.findFinalGrade(id);
   }
 
-  update(id: string, updateFinalGradeDto: UpdateFinalGradeDto): Promise<boolean> {
-    return this.finalGradeRepository.updateFinalGrade(id, updateFinalGradeDto);
+  update(
+    final_grade_id: string,
+    updateFinalGradeDto: UpdateFinalGradeDto,
+    callerUser: User,
+  ): Promise<boolean> {
+    if (!this.policy.isHasPermissionByFinalGradeId(final_grade_id, callerUser)) {
+      throw new ForbiddenException(ErrorMap.FORBIDDEN_ERROR);
+    }
+    return this.finalGradeRepository.updateFinalGrade(final_grade_id, updateFinalGradeDto);
   }
 
   remove(id: string): Promise<boolean> {

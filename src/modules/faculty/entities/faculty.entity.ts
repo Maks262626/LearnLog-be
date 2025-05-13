@@ -1,13 +1,26 @@
-import { ApiProperty } from "@nestjs/swagger";
-import sequelize from "sequelize";
-import { BelongsTo, Column, CreatedAt, DataType, Default, DeletedAt, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
-import { Group } from "src/modules/group/entities/group.entity";
-import { University } from "src/modules/university/entities/university.entity";
-import { User } from "src/modules/user/entities/user.entity";
-import { v4 } from "uuid";
+import { ApiProperty } from '@nestjs/swagger';
+import sequelize from 'sequelize';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DeletedAt,
+  ForeignKey,
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Group } from 'src/modules/group/entities/group.entity';
+import { University } from 'src/modules/university/entities/university.entity';
+import { User } from 'src/modules/user/entities/user.entity';
+import { v4 } from 'uuid';
 
-@Table({tableName: 'faculties'})
-export class Faculty extends Model<Faculty>{
+@Table({ tableName: 'faculties' })
+export class Faculty extends Model<Faculty> {
   @PrimaryKey
   @ApiProperty()
   @Default(DataType.UUIDV4)
@@ -22,13 +35,13 @@ export class Faculty extends Model<Faculty>{
   @ForeignKey(() => University)
   university_id: string;
 
-  @BelongsTo(()=>University)
+  @BelongsTo(() => University)
   university: University;
 
-  @HasMany(()=>Group)
+  @HasMany(() => Group)
   groups: Group[];
 
-  @HasMany(()=>User)
+  @HasMany(() => User)
   users: User[];
 
   @ApiProperty()
@@ -53,7 +66,7 @@ export const facultyProviders = [
     hooks: {
       beforeCreate: (entity: Faculty) => {
         entity.id = v4();
-      }
-    }
-  }
-]
+      },
+    },
+  },
+];

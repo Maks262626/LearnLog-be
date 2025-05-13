@@ -20,7 +20,7 @@ export class RoleGuard extends AuthGuard('jwt') implements CanActivate {
     if (!canActivate) throw new UnauthorizedException(ErrorMap.AUTH_ERROR);
 
     const request = context.switchToHttp().getRequest();
-    const role = request.user.roles[0];
+    const role = request.user.role;
 
     if (!this.allowedRoles || this.allowedRoles.length === 0) {
       return false;
