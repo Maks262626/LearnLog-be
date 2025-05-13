@@ -59,8 +59,11 @@ export class AssignmentService {
     return this.assignmentRepository.findAllAssignments();
   }
 
-  findOne(id: string): Promise<Assignment> {
-    return this.assignmentRepository.findAssignment(id);
+  findOne(assignment_id: string,callerUser: User): Promise<Assignment> {
+    if (!this.policy.isHasPermissionByAssignmentId(assignment_id, callerUser)) {
+      throw new ForbiddenException(ErrorMap.FORBIDDEN_ERROR);
+    }
+    return this.assignmentRepository.findAssignment(assignment_id);
   }
 
   getAssigmentsBySubjectId(subject_id: string, callerUser: User): Promise<Assignment[]> {

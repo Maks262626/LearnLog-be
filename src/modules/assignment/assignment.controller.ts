@@ -32,10 +32,10 @@ export class AssignmentController {
     return this.assignmentService.getAssigmentsBySubjectId(id, user);
   }
 
-  @UseGuards(Role(UserRoleName.SUPERADMIN))
+  @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.assignmentService.findOne(id);
+  findOne(@Param('id') id: string,@CurrentUser() user: User) {
+    return this.assignmentService.findOne(id,user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER))
