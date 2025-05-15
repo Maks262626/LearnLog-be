@@ -45,7 +45,7 @@ export class UserController {
     return this.userService.findUsersFromGroup(group_id, user);
   }
 
-  @UseGuards(Role(UserRoleName.MANAGER))
+  @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER))
   @Get(':id')
   findUser(@Param('id') id: string, @CurrentUser() user: User) {
     return this.userService.findUserWithPolicy(id, user);
@@ -68,7 +68,7 @@ export class UserController {
     return this.userService.findUsersFromFaculty(faculty_id);
   }
 
-  @UseGuards(Role(UserRoleName.MANAGER, UserRoleName.TEACHER))
+  @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER, UserRoleName.TEACHER))
   @Get('group/:id')
   findUsersFromGroup(@Param('id') id: string, @CurrentUser() user: User): Promise<User[]> {
     return this.userService.findUsersFromGroup(id, user);
@@ -80,7 +80,7 @@ export class UserController {
   }
 
   @Patch('/role/:id')
-  @UseGuards(Role(UserRoleName.MANAGER))
+  @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER))
   async setUserRole(
     @Param('id') userId: string,
     @Body() setRoleDto: SetRoleDto,
@@ -89,7 +89,7 @@ export class UserController {
     this.userService.setUserRole(userId, setRoleDto, user);
   }
 
-  @UseGuards(Role(UserRoleName.MANAGER))
+  @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER))
   @Delete(':id')
   removeUser(@Param('id') id: string, @CurrentUser() user: User) {
     return this.userService.removeUser(id, user);
