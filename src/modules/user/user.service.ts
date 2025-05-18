@@ -35,7 +35,7 @@ export class UserService {
 
 
   async getUser(user_id: string,callerUser?: User): Promise<User> {
-    if (!this.policy.isManagerHasPermission(user_id, callerUser)) {
+    if (callerUser && !this.policy.isManagerHasPermission(user_id, callerUser)) {
       throw new ForbiddenException(ErrorMap.FORBIDDEN_ERROR);
     }
 
