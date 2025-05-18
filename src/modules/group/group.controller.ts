@@ -7,43 +7,44 @@ import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { GroupService } from './group.service';
+import { GROUP_CONTROLLER, GROUP_ROUTES } from './group.routes';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('group')
+@Controller(GROUP_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Post()
+  @Post(GROUP_ROUTES.CREATE)
   create(@Body() createGroupDto: CreateGroupDto) {
     return this.groupService.create(createGroupDto);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Get()
+  @Get(GROUP_ROUTES.FIND_ALL)
   findAll() {
     return this.groupService.findAll();
   }
 
-  @Get('get-in-my-faculty')
+  @Get(GROUP_ROUTES.FIND_IN_MY_FACULTY)
   findGroupsInMyFaculty(@CurrentUser() user: User) {
     const { faculty_id } = user;
     return this.groupService.findGroupsByFacultyId(faculty_id);
   }
 
-  @Get('get-by-faculty-id/:id')
+  @Get(GROUP_ROUTES.FIND_BY_FACULTY_ID)
   findGroupsByFacultyId(@Param('id') id: string) {
     return this.groupService.findGroupsByFacultyId(id);
   }
 
-  @Get(':id')
+  @Get(GROUP_ROUTES.FIND_ONE)
   findOne(@Param('id') id: string) {
     return this.groupService.findOne(id);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Patch(':id')
+  @Patch(GROUP_ROUTES.UPDATE)
   update(
     @Param('id') id: string,
     @Body() updateGroupDto: UpdateGroupDto,
@@ -53,7 +54,7 @@ export class GroupController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Delete(':id')
+  @Delete(GROUP_ROUTES.REMOVE)
   remove(@Param('id') id: string, @CurrentUser() user: User) {
     return this.groupService.remove(id, user);
   }

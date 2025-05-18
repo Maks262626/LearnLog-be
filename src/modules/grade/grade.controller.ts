@@ -7,27 +7,28 @@ import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateGradeDto } from './dto/create-grade.dto';
 import { UpdateGradeDto } from './dto/update-grade.dto';
 import { GradeService } from './grade.service';
+import { GRADE_CONTROLLER, GRADE_ROUTES } from './grade.routes';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('grade')
+@Controller(GRADE_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 export class GradeController {
   constructor(private readonly gradeService: GradeService) {}
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Post()
+  @Post(GRADE_ROUTES.CREATE)
   create(@Body() createGradeDto: CreateGradeDto) {
     return this.gradeService.create(createGradeDto);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Get()
+  @Get(GRADE_ROUTES.FIND_ALL)
   findAll() {
     return this.gradeService.findAll();
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
-  @Get('/by-user-assignment-id/:userId/:assignmentId')
+  @Get(GRADE_ROUTES.FIND_BY_USER_ASSIGNMENT)
   getGradeByUserIdAndAssignmentId(
     @Param('userId') userId: string,
     @Param('assignmentId') assignmentId: string,
@@ -37,19 +38,19 @@ export class GradeController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
-  @Get('/by-assignment-id/:id')
+  @Get(GRADE_ROUTES.FIND_BY_ASSIGNMENT)
   getGradesByAssignmentId(@Param('id') id: string, @CurrentUser() user: User) {
     return this.gradeService.getGradesByAssignmentId(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
-  @Get(':id')
+  @Get(GRADE_ROUTES.FIND_ONE)
   findOne(@Param('id') id: string, user: User) {
     return this.gradeService.findOne(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER))
-  @Patch(':id')
+  @Patch(GRADE_ROUTES.UPDATE)
   update(
     @Param('id') id: string,
     @Body() updateGradeDto: UpdateGradeDto,
@@ -59,7 +60,7 @@ export class GradeController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Delete(':id')
+  @Delete(GRADE_ROUTES.REMOVE)
   remove(@Param('id') id: string) {
     return this.gradeService.remove(id);
   }

@@ -7,21 +7,22 @@ import { User, UserRoleName } from '../user/entities/user.entity';
 import { AttendanceService } from './attendance.service';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
 import { UpdateAttendanceDto } from './dto/update-attendance.dto';
+import { ATTENDANCE_CONTROLLER, ATTENDANCE_ROUTES } from './attendance,routes';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('attendance')
+@Controller(ATTENDANCE_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 export class AttendanceController {
   constructor(private readonly attendanceService: AttendanceService) {}
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Post()
+  @Post(ATTENDANCE_ROUTES.CREATE)
   create(@Body() createAttendanceDto: CreateAttendanceDto) {
     return this.attendanceService.create(createAttendanceDto);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Get()
+  @Get(ATTENDANCE_ROUTES.FIND_ALL)
   findAll() {
     return this.attendanceService.findAll();
   }
@@ -29,19 +30,19 @@ export class AttendanceController {
   @UseGuards(
     Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER, UserRoleName.TEACHER, UserRoleName.STUDENT),
   )
-  @Get('/subject-instance/:id')
+  @Get(ATTENDANCE_ROUTES.GET_BY_SUBJECT_INSTANCE_ID)
   getBySubjectInstanceId(@Param('id') id: string, @CurrentUser() user: User) {
     return this.attendanceService.getBySubjectInstanceId(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Get(':id')
+  @Get(ATTENDANCE_ROUTES.FIND_ONE)
   findOne(@Param('id') id: string) {
     return this.attendanceService.findOne(id);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER, UserRoleName.TEACHER))
-  @Patch(':id')
+  @Patch(ATTENDANCE_ROUTES.UPDATE)
   update(
     @Param('id') id: string,
     @Body() updateAttendanceDto: UpdateAttendanceDto,
@@ -51,7 +52,7 @@ export class AttendanceController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Delete(':id')
+  @Delete(ATTENDANCE_ROUTES.REMOVE)
   remove(@Param('id') id: string) {
     return this.attendanceService.remove(id);
   }

@@ -7,47 +7,48 @@ import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateFacultyDto } from './dto/create-faculty.dto';
 import { UpdateFacultyDto } from './dto/update-faculty.dto';
 import { FacultyService } from './faculty.service';
+import { FACULTY_CONTROLLER, FACULTY_ROUTES } from './faculty.routes';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('faculty')
+@Controller(FACULTY_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 export class FacultyController {
   constructor(private readonly facultyService: FacultyService) {}
 
-  @Post()
+  @Post(FACULTY_ROUTES.CREATE)
   create(@Body() createFacultyDto: CreateFacultyDto) {
     return this.facultyService.create(createFacultyDto);
   }
 
-  @Get()
+  @Get(FACULTY_ROUTES.FIND_ALL)
   findAll() {
     return this.facultyService.findAll();
   }
 
   @UseGuards(Role(UserRoleName.MANAGER))
-  @Get('/get-faculties-in-my-uni')
+  @Get(FACULTY_ROUTES.FIND_FACULTIES_IN_MY_UNI)
   findFacultiesInMyUniversity(@CurrentUser() user: User) {
     return this.facultyService.getFacultiesByUniversityId(user.university_id);
   }
 
-  @Get(':id')
+  @Get(FACULTY_ROUTES.FIND_ONE)
   findOne(@Param('id') id: string) {
     return this.facultyService.findOne(id);
   }
 
-  @Get('/get-by-uni-id/:id')
+  @Get(FACULTY_ROUTES.FIND_BY_UNI_ID)
   findFacultiesByUniversityId(@Param('id') id: string) {
     return this.facultyService.getFacultiesByUniversityId(id);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Patch(':id')
+  @Patch(FACULTY_ROUTES.UPDATE)
   update(@Param('id') id: string, @Body() updateFacultyDto: UpdateFacultyDto) {
     return this.facultyService.update(id, updateFacultyDto);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Delete(':id')
+  @Delete(FACULTY_ROUTES.REMOVE)
   remove(@Param('id') id: string) {
     return this.facultyService.remove(id);
   }

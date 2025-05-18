@@ -7,15 +7,16 @@ import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateStudentSubmissionDto } from './dto/create-student-submission.dto';
 import { UpdateStudentSubmissionDto } from './dto/update-student-submission.dto';
 import { StudentSubmissionService } from './student-submission.service';
+import { STUDENT_SUBMISSION_CONTROLLER, STUDENT_SUBMISSION_ROUTES } from './student-submission.routes';
 @UseGuards(AuthGuard('jwt'))
-@Controller('student-submission')
+@Controller(STUDENT_SUBMISSION_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 @UseGuards(AuthGuard('jwt'))
 export class StudentSubmissionController {
   constructor(private readonly studentSubmissionService: StudentSubmissionService) {}
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.STUDENT))
-  @Post()
+  @Post(STUDENT_SUBMISSION_ROUTES.CREATE)
   create(
     @Body() createStudentSubmissionDto: CreateStudentSubmissionDto,
     @CurrentUser() user: User,
@@ -24,25 +25,25 @@ export class StudentSubmissionController {
     return this.studentSubmissionService.create(createStudentSubmissionDto);
   }
 
-  @Get()
+  @Get(STUDENT_SUBMISSION_ROUTES.FIND_ALL)
   findAll() {
     return this.studentSubmissionService.findAll();
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
-  @Get(':id')
+  @Get(STUDENT_SUBMISSION_ROUTES.FIND_ONE)
   findOne(@Param('id') id: string, @CurrentUser() user: User) {
     return this.studentSubmissionService.findOne(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
-  @Get('/by-subject-id/:id')
+  @Get(STUDENT_SUBMISSION_ROUTES.FIND_BY_SUBJECT_ID)
   findStudentSubmissionBySubjectId(@Param('id') id: string, @CurrentUser() user: User) {
     return this.studentSubmissionService.findStudentSubmissionBySubjectId(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER))
-  @Patch(':id')
+  @Patch(STUDENT_SUBMISSION_ROUTES.UPDATE)
   update(
     @Param('id') id: string,
     @Body() updateStudentSubmissionDto: UpdateStudentSubmissionDto,
@@ -52,7 +53,7 @@ export class StudentSubmissionController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Delete(':id')
+  @Delete(STUDENT_SUBMISSION_ROUTES.DELETE)
   remove(@Param('id') id: string) {
     return this.studentSubmissionService.remove(id);
   }

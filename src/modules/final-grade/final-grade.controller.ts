@@ -7,33 +7,34 @@ import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateFinalGradeDto } from './dto/create-final-grade.dto';
 import { UpdateFinalGradeDto } from './dto/update-final-grade.dto';
 import { FinalGradeService } from './final-grade.service';
+import { FINAL_GRADE_CONTROLLER, FINAL_GRADE_ROUTES } from './final-grade.routes';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('final-grade')
+@Controller(FINAL_GRADE_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 export class FinalGradeController {
   constructor(private readonly finalGradeService: FinalGradeService) {}
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Post()
+  @Post(FINAL_GRADE_ROUTES.CREATE)
   create(@Body() createFinalGradeDto: CreateFinalGradeDto) {
     return this.finalGradeService.create(createFinalGradeDto);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Get()
+  @Get(FINAL_GRADE_ROUTES.FIND_ALL)
   findAll() {
     return this.finalGradeService.findAll();
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Get(':id')
+  @Get(FINAL_GRADE_ROUTES.FIND_ONE)
   findOne(@Param('id') id: string) {
     return this.finalGradeService.findOne(id);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER))
-  @Patch(':id')
+  @Patch(FINAL_GRADE_ROUTES.UPDATE)
   update(
     @Param('id') id: string,
     @Body() updateFinalGradeDto: UpdateFinalGradeDto,
@@ -43,7 +44,7 @@ export class FinalGradeController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Delete(':id')
+  @Delete(FINAL_GRADE_ROUTES.REMOVE)
   remove(@Param('id') id: string) {
     return this.finalGradeService.remove(id);
   }

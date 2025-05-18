@@ -7,45 +7,46 @@ import { User, UserRoleName } from '../user/entities/user.entity';
 import { AssignmentService } from './assignment.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
+import { ASSIGNMENT_CONTROLLER, ASSIGNMENT_ROUTES } from './assignment.routes';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('assignment')
+@Controller(ASSIGNMENT_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 export class AssignmentController {
   constructor(private readonly assignmentService: AssignmentService) {}
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER))
-  @Post()
+  @Post(ASSIGNMENT_ROUTES.CREATE)
   create(@Body() createAssignmentDto: CreateAssignmentDto) {
     return this.assignmentService.create(createAssignmentDto);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Get()
+  @Get(ASSIGNMENT_ROUTES.FIND_ALL)
   findAll() {
     return this.assignmentService.findAll();
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
-  @Get('/by-subject-id/:id')
+  @Get(ASSIGNMENT_ROUTES.FIND_BY_SUBJECT_ID)
   findBySubjectId(@Param('id') id: string, @CurrentUser() user: User) {
     return this.assignmentService.getAssigmentsBySubjectId(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
-  @Get(':id')
+  @Get(ASSIGNMENT_ROUTES.FIND_ONE)
   findOne(@Param('id') id: string,@CurrentUser() user: User) {
     return this.assignmentService.findOne(id,user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER))
-  @Patch(':id')
+  @Patch(ASSIGNMENT_ROUTES.UPDATE)
   update(@Param('id') id: string, @Body() updateAssignmentDto: UpdateAssignmentDto) {
     return this.assignmentService.update(id, updateAssignmentDto);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER))
-  @Delete(':id')
+  @Delete(ASSIGNMENT_ROUTES.REMOVE)
   remove(@Param('id') id: string) {
     return this.assignmentService.remove(id);
   }

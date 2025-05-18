@@ -6,37 +6,38 @@ import { UserRoleName } from '../user/entities/user.entity';
 import { CreateUniversityDto } from './dto/create-university.dto';
 import { UpdateUniversityDto } from './dto/update-university.dto';
 import { UniversityService } from './university.service';
+import { UNIVERSITY_CONTROLLER, UNIVERSITY_ROUTES } from './university.routes';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('university')
+@Controller(UNIVERSITY_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 export class UniversityController {
   constructor(private readonly universityService: UniversityService) {}
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Post()
+  @Post(UNIVERSITY_ROUTES.CREATE)
   createUniversity(@Body() createUniversityDto: CreateUniversityDto) {
     return this.universityService.createUniversity(createUniversityDto);
   }
 
-  @Get()
+  @Get(UNIVERSITY_ROUTES.FIND_ALL)
   findAllUniversities() {
     return this.universityService.findAllUniversities();
   }
 
-  @Get(':id')
+  @Get(UNIVERSITY_ROUTES.FIND_ONE)
   findUniversity(@Param('id') id: string) {
     return this.universityService.findUniversity(id);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Patch(':id')
+  @Patch(UNIVERSITY_ROUTES.UPDATE)
   updateUniversity(@Param('id') id: string, @Body() updateUniversityDto: UpdateUniversityDto) {
     return this.universityService.updateUniversity(id, updateUniversityDto);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN))
-  @Delete(':id')
+  @Delete(UNIVERSITY_ROUTES.DELETE)
   removeUniversity(@Param('id') id: string) {
     return this.universityService.removeUniversity(id);
   }

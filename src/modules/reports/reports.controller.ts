@@ -6,28 +6,29 @@ import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
 import { ReporstService } from './reports.service';
+import { REPORTS_CONTROLLER, REPORTS_ROUTES } from './reports.routes';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('reports')
+@Controller(REPORTS_CONTROLLER)
 @ApiBearerAuth('JWT-auth')
 @UseGuards(AuthGuard('jwt'))
 export class ReportsController {
   constructor(private readonly reportsService: ReporstService) {}
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.STUDENT))
-  @Get('/student-grades')
+  @Get(REPORTS_ROUTES.STUDENT_GRADES)
   studentGrades(@CurrentUser() user: User) {
     return this.reportsService.studentGrades(user.id);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.STUDENT))
-  @Get('/student-individual-attendances')
+  @Get(REPORTS_ROUTES.STUDENT_INDIVIDUAL_ATTENDANCES)
   individualStudentAttendances(@CurrentUser() user: User) {
     return this.reportsService.individualStudentAttendances(user.id);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.STUDENT))
-  @Get('/student-individual-attendances/pdf')
+  @Get(REPORTS_ROUTES.STUDENT_INDIVIDUAL_ATTENDANCES_PDF)
   async individualStudentAttendancesPdf(@Res() res: Response, @CurrentUser() user: User) {
     const { id, first_name, last_name } = user;
     const fullName = `${first_name} ${last_name}`;
@@ -47,7 +48,7 @@ export class ReportsController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.STUDENT))
-  @Get('/student-individual-grades/pdf')
+  @Get(REPORTS_ROUTES.STUDENT_INDIVIDUAL_GRADES_PDF)
   async generateIndividualStudentGradesReportPdf(@Res() res: Response, @CurrentUser() user: User) {
     const { id, first_name, last_name } = user;
     const fullName = `${first_name} ${last_name}`;
@@ -68,31 +69,31 @@ export class ReportsController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Get('/student-grades/:id')
+  @Get(REPORTS_ROUTES.STUDENT_GRADES_BY_USER_ID)
   studentGradesByUserId(@Param('id') id: string, @CurrentUser() user: User) {
     return this.reportsService.studentGrades(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Get('/student-individual-attendances/:id')
+  @Get(REPORTS_ROUTES.STUDENT_INDIVIDUAL_ATTENDANCES_BY_USER_ID)
   individualStudentAttendancesByUserId(@Param('id') id: string, @CurrentUser() user: User) {
     return this.reportsService.individualStudentAttendances(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Get('/student-group-attendance-summary/:id')
+  @Get(REPORTS_ROUTES.STUDENT_GROUP_ATTENDANCE_SUMMARY)
   studentGroupAttendanceSummary(@Param('id') id: string, @CurrentUser() user: User) {
     return this.reportsService.studentGroupAttendanceSummary(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Get('/student-group-grade-summary/:id')
+  @Get(REPORTS_ROUTES.STUDENT_GROUP_GRADE_SUMMARY)
   studentGroupGradeSummary(@Param('id') id: string, @CurrentUser() user: User) {
     return this.reportsService.studentGroupGradesSummaryReport(id);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Get('/student-group-attendance-individual/pdf/:id')
+  @Get(REPORTS_ROUTES.STUDENT_GROUP_ATTENDANCE_INDIVIDUAL_PDF)
   async IndividualAttendanceReportsByGroupPdf(
     @Res() res: Response,
     @Param('id') id: string,
@@ -113,7 +114,7 @@ export class ReportsController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Get('/student-group-attendance-summary/xlsx/:id')
+  @Get(REPORTS_ROUTES.STUDENT_GROUP_ATTENDANCE_SUMMARY_XLSX)
   async AttendanceReportsByGroupXlsx(
     @Res() res: Response,
     @Param('id') id: string,
@@ -132,7 +133,7 @@ export class ReportsController {
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
-  @Get('/student-group-grade-summary/xlsx/:id')
+  @Get(REPORTS_ROUTES.STUDENT_GROUP_GRADE_SUMMARY_XLSX)
   async GradeReportsByGroupXlsx(
     @Res() res: Response,
     @Param('id') id: string,
