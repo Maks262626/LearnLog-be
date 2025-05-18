@@ -49,7 +49,7 @@ export class UserController {
   @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER))
   @Get(USER_ROUTES.FIND_USER)
   findUser(@Param('id') id: string, @CurrentUser() user: User) {
-    return this.userService.findUserWithPolicy(id, user);
+    return this.userService.getUser(id, user);
   }
 
   @Get(USER_ROUTES.FIND_USERS_FROM_UNIVERSITY)

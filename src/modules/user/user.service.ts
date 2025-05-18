@@ -33,12 +33,19 @@ export class UserService {
     return this.userRepository.findAllUsers();
   }
 
-  findUserWithPolicy(id: string, callerUser: User) {
-    if (!this.policy.isManagerHasPermission(id, callerUser)) {
+
+  async getUser(user_id: string,callerUser?: User): Promise<User> {
+    if (!this.policy.isManagerHasPermission(user_id, callerUser)) {
       throw new ForbiddenException(ErrorMap.FORBIDDEN_ERROR);
     }
 
-    return this.userRepository.findUser(id);
+    const user = await this.userRepository.findUser(user_id);
+
+    if (!user) {
+      throw new BadRequestException(ErrorMap.CANNOT_FIND_MODEL);
+    }
+
+    return user;
   }
 
   getTeachersByFacultyId(faculty_id: string) {
@@ -58,23 +65,13 @@ export class UserService {
     await this.updateUser(id, updateUser);
   }
 
-  async getUserById(id: string): Promise<User> {
-    const user = await this.userRepository.findUser(id);
-
-    if (!user) {
-      throw new BadRequestException(ErrorMap.CANNOT_FIND_MODEL);
-    }
-
-    return user;
-  }
-
   async getMe(auth0_user_id: string): Promise<Partial<User>> {
     const user = await this.userRepository.getUserMe(auth0_user_id);
     if (!user || !this.checkIfAllFieldsCompleted(user)) {
       return { is_registration_completed: false };
     }
     await this.updateRegistrationStatus(user.id, true);
-    return this.getUserById(user.id);
+    return this.getUser(user.id);
   }
 
   async setUserRole(userId: string, setRoleDto: SetRoleDto, user: User): Promise<void> {
@@ -91,7 +88,7 @@ export class UserService {
     if (!this.policy.isManagerHasPermission(user_id, caller)) {
       throw new ForbiddenException(ErrorMap.FORBIDDEN_ERROR);
     }
-    const user = await this.findUserWithPolicy(user_id, caller);
+    const user = await this.getUser(user_id, caller);
     this.authzService.deleteUserAuth0(user.auth0_user_id);
     return this.userRepository.deleteUser(user_id);
   }

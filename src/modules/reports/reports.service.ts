@@ -68,7 +68,11 @@ export class ReporstService {
 
   async studentGroupGradesSummaryReport(
     group_id: string,
+    callerUser?: User
   ): Promise<StudentGroupGradesSummaryReport[]> {
+    if (callerUser && !this.policy.isManagerHasPermissionByGroupId(group_id, callerUser)) {
+      throw new ForbiddenException(ErrorMap.FORBIDDEN_ERROR);
+    }
     const subjects = await this.subjectRepository.getSubjectsByGroupId(group_id);
     const users = await this.userRepository.findUsersFromGroup(group_id);
     const data: StudentGroupGradesSummaryReport[] = [];
