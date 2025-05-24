@@ -4,10 +4,10 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
+import { ATTENDANCE_CONTROLLER, ATTENDANCE_ROUTES } from './attendance,routes';
 import { AttendanceService } from './attendance.service';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
 import { UpdateAttendanceDto } from './dto/update-attendance.dto';
-import { ATTENDANCE_CONTROLLER, ATTENDANCE_ROUTES } from './attendance,routes';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(ATTENDANCE_CONTROLLER)

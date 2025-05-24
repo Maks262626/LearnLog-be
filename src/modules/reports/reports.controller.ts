@@ -5,8 +5,8 @@ import { Response } from 'express';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
-import { ReporstService } from './reports.service';
 import { REPORTS_CONTROLLER, REPORTS_ROUTES } from './reports.routes';
+import { ReporstService } from './reports.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(REPORTS_CONTROLLER)

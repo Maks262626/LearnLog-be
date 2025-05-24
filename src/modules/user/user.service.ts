@@ -33,8 +33,7 @@ export class UserService {
     return this.userRepository.findAllUsers();
   }
 
-
-  async getUser(user_id: string,callerUser?: User): Promise<User> {
+  async getUser(user_id: string, callerUser?: User): Promise<User> {
     if (callerUser && !this.policy.isManagerHasPermission(user_id, callerUser)) {
       throw new ForbiddenException(ErrorMap.FORBIDDEN_ERROR);
     }

@@ -6,8 +6,11 @@ import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateStudentSubmissionDto } from './dto/create-student-submission.dto';
 import { UpdateStudentSubmissionDto } from './dto/update-student-submission.dto';
+import {
+  STUDENT_SUBMISSION_CONTROLLER,
+  STUDENT_SUBMISSION_ROUTES,
+} from './student-submission.routes';
 import { StudentSubmissionService } from './student-submission.service';
-import { STUDENT_SUBMISSION_CONTROLLER, STUDENT_SUBMISSION_ROUTES } from './student-submission.routes';
 @UseGuards(AuthGuard('jwt'))
 @Controller(STUDENT_SUBMISSION_CONTROLLER)
 @ApiBearerAuth('JWT-auth')

@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as path from 'path';
 import { ErrorMap } from 'src/shared/response/error.map';
+import { font } from '../../assets/Roboto-Black-normal.js';
 import { AssignmentRepository } from '../assignment/assignment.repository';
 import { AttendanceRepository } from '../attendance/attendance.repository';
 import { AttendanceStatus } from '../attendance/entities/attendance.entity';
@@ -34,7 +35,13 @@ export class ReporstService {
     private readonly gradeRepository: GradeRepository,
     private readonly attendanceRepository: AttendanceRepository,
     private readonly userRepository: UserRepository,
-  ) {}
+  ) {
+    var callAddFont = function () {
+      this.addFileToVFS('Roboto-Black-normal.ttf', font);
+      this.addFont('Roboto-Black-normal.ttf', 'Roboto-Black', 'normal');
+    };
+    jsPDF.API.events.push(['addFonts', callAddFont]);
+  }
 
   async studentGrades(user_id: string, callerUser?: User): Promise<StudentGradesReport[]> {
     if (callerUser && !this.policy.isManagerHasPermission(user_id, callerUser)) {
@@ -68,7 +75,7 @@ export class ReporstService {
 
   async studentGroupGradesSummaryReport(
     group_id: string,
-    callerUser?: User
+    callerUser?: User,
   ): Promise<StudentGroupGradesSummaryReport[]> {
     if (callerUser && !this.policy.isManagerHasPermissionByGroupId(group_id, callerUser)) {
       throw new ForbiddenException(ErrorMap.FORBIDDEN_ERROR);
@@ -177,7 +184,7 @@ export class ReporstService {
   }
 
   setBasePdf(doc: jsPDF, name: string) {
-    doc.setFont('helvetica');
+    doc.setFont('Roboto-Black', 'normal');
     doc.setFontSize(14);
     const logoPath = path.resolve(process.cwd(), 'src', 'assets', 'logo.png');
     const image = fs.readFileSync(logoPath, { encoding: 'base64' });

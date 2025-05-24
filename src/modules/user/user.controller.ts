@@ -6,8 +6,8 @@ import { Role } from 'src/shared/guards/role.guard';
 import { CreateUserDto, SetRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserRoleName } from './entities/user.entity';
-import { UserService } from './user.service';
 import { USER_CONTROLLER, USER_ROUTES } from './user.routes';
+import { UserService } from './user.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(USER_CONTROLLER)
@@ -46,7 +46,7 @@ export class UserController {
     return this.userService.findUsersFromGroup(group_id, user);
   }
 
-  @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER))
+  @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
   @Get(USER_ROUTES.FIND_USER)
   findUser(@Param('id') id: string, @CurrentUser() user: User) {
     return this.userService.getUser(id, user);
@@ -69,7 +69,7 @@ export class UserController {
     return this.userService.findUsersFromFaculty(faculty_id);
   }
 
-  @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER, UserRoleName.TEACHER))
+  @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER, UserRoleName.TEACHER))
   @Get(USER_ROUTES.FIND_USERS_FROM_GROUP)
   findUsersFromGroup(@Param('id') id: string, @CurrentUser() user: User): Promise<User[]> {
     return this.userService.findUsersFromGroup(id, user);
@@ -81,7 +81,7 @@ export class UserController {
   }
 
   @Patch(USER_ROUTES.SET_USER_ROLE)
-  @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER))
+  @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
   async setUserRole(
     @Param('id') userId: string,
     @Body() setRoleDto: SetRoleDto,
@@ -90,7 +90,7 @@ export class UserController {
     this.userService.setUserRole(userId, setRoleDto, user);
   }
 
-  @UseGuards(Role(UserRoleName.SUPERADMIN,UserRoleName.MANAGER))
+  @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.MANAGER))
   @Delete(USER_ROUTES.DELETE_USER)
   removeUser(@Param('id') id: string, @CurrentUser() user: User) {
     return this.userService.removeUser(id, user);

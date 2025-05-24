@@ -4,10 +4,10 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
+import { ASSIGNMENT_CONTROLLER, ASSIGNMENT_ROUTES } from './assignment.routes';
 import { AssignmentService } from './assignment.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
-import { ASSIGNMENT_CONTROLLER, ASSIGNMENT_ROUTES } from './assignment.routes';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(ASSIGNMENT_CONTROLLER)
@@ -35,8 +35,8 @@ export class AssignmentController {
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER, UserRoleName.STUDENT))
   @Get(ASSIGNMENT_ROUTES.FIND_ONE)
-  findOne(@Param('id') id: string,@CurrentUser() user: User) {
-    return this.assignmentService.findOne(id,user);
+  findOne(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.assignmentService.findOne(id, user);
   }
 
   @UseGuards(Role(UserRoleName.SUPERADMIN, UserRoleName.TEACHER))

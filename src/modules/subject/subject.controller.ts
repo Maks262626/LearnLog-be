@@ -6,8 +6,8 @@ import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
-import { SubjectService } from './subject.service';
 import { SUBJECT_CONTROLLER, SUBJECT_ROUTES } from './subject.routes';
+import { SubjectService } from './subject.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(SUBJECT_CONTROLLER)

@@ -6,8 +6,8 @@ import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { GroupService } from './group.service';
 import { GROUP_CONTROLLER, GROUP_ROUTES } from './group.routes';
+import { GroupService } from './group.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(GROUP_CONTROLLER)

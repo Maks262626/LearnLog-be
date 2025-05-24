@@ -13,5 +13,5 @@ export const USER_ROUTES = {
   FIND_USERS_FROM_GROUP: 'group/:id',
   UPDATE_USER: ':id',
   SET_USER_ROLE: 'role/:id',
-  DELETE_USER: ':id'
+  DELETE_USER: ':id',
 } as const;

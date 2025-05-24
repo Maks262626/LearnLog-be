@@ -22,8 +22,7 @@ export class UserPolicyService {
     private readonly finalGradeRepository: FinalGradeRepository,
     private readonly subjectInstanceRepository: SubjectInstanceRepository,
     private readonly attendanceRepository: AttendanceRepository,
-  ) { }
-
+  ) {}
 
   private isSuperAdmin(user: User): boolean {
     return user.role === UserRoleName.SUPERADMIN;
@@ -60,7 +59,7 @@ export class UserPolicyService {
 
     const user = await this.userRepository.findUser(userId);
     if (!user) return false;
-    
+
     return this.isFacultyMatch(user.faculty_id, callerUser);
   }
 
@@ -110,10 +109,10 @@ export class UserPolicyService {
     if (!grade) return false;
 
     const assignment = await this.assignmentRepository.findAssignment(grade.assignment_id);
-    if(!assignment) return false;
+    if (!assignment) return false;
 
     const subject = await this.subjectRepository.findSubject(assignment.subject_id);
-    if(!subject) return false;
+    if (!subject) return false;
 
     if (subject.teacher_id === callerUser.id) return true;
     return false;
@@ -126,7 +125,7 @@ export class UserPolicyService {
     if (!finalGrade) return false;
 
     const subject = await this.subjectRepository.findSubject(finalGrade.subject_id);
-    if(!subject) return false;
+    if (!subject) return false;
 
     if (subject.teacher_id === callerUser.id) return true;
     return false;
@@ -140,10 +139,10 @@ export class UserPolicyService {
     if (!subjectInstance) return false;
 
     const subject = await this.subjectRepository.findSubject(subjectInstance.subject_id);
-    if(!subject) return false;
+    if (!subject) return false;
 
     const group = await this.groupRepository.findGroup(subject.group_id);
-    if(!group) return false;
+    if (!group) return false;
 
     if (callerUser.role === UserRoleName.MANAGER && callerUser.faculty_id === group.faculty_id)
       return true;
@@ -162,14 +161,14 @@ export class UserPolicyService {
     const subjectInstance = await this.subjectInstanceRepository.findSubjectInstance(
       attendance.subject_instance_id,
     );
-    if(!subjectInstance) return false;
+    if (!subjectInstance) return false;
 
     const subject = await this.subjectRepository.findSubject(subjectInstance.subject_id);
-    if(!subject) return false;
+    if (!subject) return false;
 
     const group = await this.groupRepository.findGroup(subject.group_id);
-    if(!group) return false;
-    
+    if (!group) return false;
+
     if (callerUser.role === UserRoleName.MANAGER && callerUser.faculty_id === group.faculty_id)
       return true;
     if (callerUser.role === UserRoleName.TEACHER && callerUser.id === subject.teacher_id)
@@ -179,16 +178,16 @@ export class UserPolicyService {
 
   async isHasPermissionByAssignmentId(assignment_id: string, callerUser: User) {
     if (this.isSuperAdmin(callerUser)) return true;
-    
+
     const assignment = await this.assignmentRepository.findAssignment(assignment_id);
     if (!assignment) return false;
 
     const subject = await this.subjectRepository.findSubject(assignment.subject_id);
-    if(!subject) return false;
+    if (!subject) return false;
 
     const group = await this.groupRepository.findGroup(subject.group_id);
-    if(!group) return false;
-    
+    if (!group) return false;
+
     if (callerUser.role === UserRoleName.TEACHER && callerUser.faculty_id === group.faculty_id)
       return true;
     if (callerUser.role === UserRoleName.STUDENT && callerUser.group_id === group.id) return true;

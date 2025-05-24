@@ -6,8 +6,8 @@ import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateFacultyDto } from './dto/create-faculty.dto';
 import { UpdateFacultyDto } from './dto/update-faculty.dto';
-import { FacultyService } from './faculty.service';
 import { FACULTY_CONTROLLER, FACULTY_ROUTES } from './faculty.routes';
+import { FacultyService } from './faculty.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(FACULTY_CONTROLLER)

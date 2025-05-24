@@ -6,8 +6,8 @@ import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateGradeDto } from './dto/create-grade.dto';
 import { UpdateGradeDto } from './dto/update-grade.dto';
-import { GradeService } from './grade.service';
 import { GRADE_CONTROLLER, GRADE_ROUTES } from './grade.routes';
+import { GradeService } from './grade.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(GRADE_CONTROLLER)

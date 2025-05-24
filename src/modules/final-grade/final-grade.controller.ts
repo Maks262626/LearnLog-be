@@ -6,8 +6,8 @@ import { Role } from 'src/shared/guards/role.guard';
 import { User, UserRoleName } from '../user/entities/user.entity';
 import { CreateFinalGradeDto } from './dto/create-final-grade.dto';
 import { UpdateFinalGradeDto } from './dto/update-final-grade.dto';
-import { FinalGradeService } from './final-grade.service';
 import { FINAL_GRADE_CONTROLLER, FINAL_GRADE_ROUTES } from './final-grade.routes';
+import { FinalGradeService } from './final-grade.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller(FINAL_GRADE_CONTROLLER)
